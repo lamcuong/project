@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  db:
+    image: mongo:4.0-xenial
+    ports:
+      - 27017:27017 
+    volumes:
+      - mongo:/data/db
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - 4000:4000
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: docker-fe
+    ports:
+      - 3005:3005
+    env_file:
+      - ./frontend/.env.local
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+volumes:
+  mongo:
+ 
