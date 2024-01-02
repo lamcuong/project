@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "target": "es2020",
+    "lib": ["ESNext"],
+    "module": "commonjs",
+    "rootDir": ".",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "typeRoots": ["node", "node_modules/@types", "global.d.ts"],
+    // "types": ["reflect-metadata"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowJs": true,
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "strictPropertyInitialization": true,
+    "noImplicitOverride": true,
+    "skipLibCheck": true,
+  },
+  "ts-node": {
+    "files": true,
+    "swc": true
+  },
+  "include": ["./src/**/*.ts", "./@types/**/*.d.ts"]
+}

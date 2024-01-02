@@ -1,0 +1,14 @@
+.sidebar {
+  &:hover {
+    width: 240px;
+    .sidebar-title{
+       width: auto;
+    }
+  }
+}
+.sidebar-avatar{
+    width: 50px;
+}
+.sidebar-title{
+    width: 0;
+}
