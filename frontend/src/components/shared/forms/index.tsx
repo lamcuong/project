@@ -57,12 +57,9 @@ export const accountForm = z.object({
 export const expenseForm = z.object({
   type: z.string().default('outcome'),
   transaction: z.object({
-    description: z.string().min(1, 'Ghi chú không được để trống'),
+    description: z.string(),
     date: z.date().default(new Date()),
-    amount: z
-      .string()
-      .min(1, 'Số tiền không được để trống')
-      .regex(/^[^\D]+$/, 'Số dư ban đầu chỉ được nhập số')
+    amount: z.coerce.number().min(1, 'Số tiền không được để trống')
   }),
   category: z.string().min(1, 'Hạng mục không được để trống')
 })
