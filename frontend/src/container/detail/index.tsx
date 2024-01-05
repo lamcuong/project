@@ -101,7 +101,7 @@ const AccountDetail: React.FC<AccountDetailProps> = () => {
     resolver: zodResolver(expenseForm),
     defaultValues: {
       transaction: {
-        amount: '',
+        amount: 0,
         description: ''
       },
       category: 'Ăn uống',
@@ -211,7 +211,8 @@ const AccountDetail: React.FC<AccountDetailProps> = () => {
       {
         name: 'transaction.amount',
         type: 'number',
-        label: 'Số tiền'
+        label: 'Số tiền',
+        inputTextProps: { useGrouping: true }
       }
     ],
     form,
