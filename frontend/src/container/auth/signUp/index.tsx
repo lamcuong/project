@@ -12,8 +12,8 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/compone
 import SuccessIcon from '../assets/success'
 import ArrowDown from '../assets/ArrowDown'
 import { signUpForm } from '@/components/shared/forms'
-import { toast } from '@/components/ui/use-toast'
 import { RotateCw } from 'lucide-react'
+import { userApi } from '@/app/api/user'
 type SignUpProps = {}
 
 const SignUp: React.FC<SignUpProps> = () => {
@@ -25,33 +25,45 @@ const SignUp: React.FC<SignUpProps> = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [signUp, { error }] = useSignUpMutation()
   const form = useForm<z.infer<typeof signUpForm>>({
-    resolver: zodResolver(signUpForm)
+    resolver: zodResolver(signUpForm),
+    defaultValues: {
+      username: '',
+      password: '',
+      confirm_password: ''
+    }
   })
-  const onSubmit = (value: z.infer<typeof signUpForm>) => {
+  const onSubmit = async (value: z.infer<typeof signUpForm>) => {
     // form.reset();
     setIsLoading(true)
     const input = {
       username: value.username,
       password: value.password
     }
-    signUp(input)
-      .unwrap()
-      .then(() => {
-        console.log('123', error)
+    await userApi.signUp(input).then((r) => {
+      if (r.success) {
         setIsOpen(true)
-        form.reset({
-          username: '',
-          confirm_password: '',
-          password: ''
-        })
-      })
-      .catch(() =>
-        toast({
-          title: 'Tài khoản đã tồn tại',
-          variant: 'destructive'
-        })
-      )
-      .finally(() => setIsLoading(false))
+        form.reset()
+      }
+    })
+    setIsLoading(false)
+    // signUp(input)
+    //   .unwrap()
+    //   .then(() => {
+    //     console.log('123', error)
+    //     setIsOpen(true)
+    //     form.reset({
+    //       username: '',
+    //       confirm_password: '',
+    //       password: ''
+    //     })
+    //   })
+    //   .catch(() =>
+    //     toast({
+    //       title: 'Tài khoản đã tồn tại',
+    //       variant: 'destructive'
+    //     })
+    //   )
+    //   .finally(() => setIsLoading(false))
   }
   return (
     <>
@@ -119,10 +131,8 @@ const SignUp: React.FC<SignUpProps> = () => {
               </FormItem>
             )}
           />
-          {/* <Button className='block min-w-[50%] mt-4' type='submit'>
-            Đăng ký
-          </Button> */}
-          <Button disabled={isLoading} variant='default' className=' mt-4 '>
+
+          <Button type='submit' disabled={isLoading} variant='default' className=' mt-4 '>
             {isLoading ? <RotateCw className='animate-spin' /> : 'Đăng ký'}
           </Button>
           {/* <Separator className='bg-slate-100' />

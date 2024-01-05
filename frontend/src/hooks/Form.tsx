@@ -133,7 +133,8 @@ export const useFormDialog = (props: UseFormDialogProps) => {
                   Lưu thông tin
                 </Button>
                 <Button
-                  className='rounded-radius bg-secondary text-secondary-foreground'
+                  className='rounded-radius'
+                  variant='secondary'
                   type='button'
                   onClick={() => {
                     setOpen(false)

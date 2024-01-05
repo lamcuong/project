@@ -25,6 +25,8 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import EmptyState from './components/emptyState'
 import Link from 'next/link'
+import { accountApi } from '@/app/api/account'
+import { title } from 'process'
 
 type AccountProps = {}
 
@@ -47,7 +49,6 @@ const Account: React.FC<AccountProps> = () => {
     setPaging((prevValue: any) => ({ ...prevValue, limit }))
   }
 
-  const [create] = useAddAccountMutation()
   const [remove] = useDeleteAccountMutation()
   const form = useForm<z.infer<typeof accountForm>>({
     resolver: zodResolver(accountForm),
@@ -87,7 +88,7 @@ const Account: React.FC<AccountProps> = () => {
     })
   }
   const onCreateAccount = async (value: z.infer<typeof accountForm>) => {
-    const account = await create(value).unwrap()
+    const account = await accountApi.create(value)
     form.reset({})
     setOpen(false)
     toast({

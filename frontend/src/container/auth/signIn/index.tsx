@@ -7,43 +7,41 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ShowPassword } from '../assets/eye'
-import { useSignInMutation } from '@/store/apis/authApi'
+// import { useSignInMutation } from '@/store/apis/authApi'
 import { setCookie } from 'cookies-next'
-import { RotateCw } from 'lucide-react'
+import { RotateCw, Router } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { signInForm } from '@/components/shared/forms'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { CardHeader } from '@/components/ui/card'
+import { userApi } from '@/app/api/user/index'
 type SignInProps = {}
 
 const SignIn: React.FC<SignInProps> = () => {
-  const [logIn] = useSignInMutation()
+  // const [logIn] = useSignInMutation()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isShow, setisShow] = useState<boolean>(false)
   const [isError, setIsError] = useState<boolean>(false)
   const route = useRouter()
   const form = useForm<z.infer<typeof signInForm>>({
-    resolver: zodResolver(signInForm)
+    resolver: zodResolver(signInForm),
+    defaultValues: {
+      password: '',
+      username: ''
+    }
   })
   const onSubmit = (value: z.infer<typeof signInForm>) => {
     setIsLoading(true)
-    logIn(value)
-      .unwrap()
-      .then((res) => {
-        // @ts-ignore
-        if (res.status === 200) {
-          setIsError(false)
-          // @ts-ignore
-          setCookie('Authorization', res.token)
-          route.push('/')
-        } else {
-          setIsError(true)
-        }
-      })
-      .catch(() => {
+    userApi.signIn(value).then((r) => {
+      console.log(r)
+      if (r.success) {
+        setCookie('Authorization', r.data?.token)
+        route.push('/')
+      } else {
         setIsError(true)
         setIsLoading(false)
-      })
+      }
+    })
   }
   return (
     <Form {...form}>

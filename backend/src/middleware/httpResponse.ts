@@ -7,6 +7,7 @@ export const httpResponse = (req: Request, res: Response, next: NextFunction) =>
       message,
       data,
       status,
+      success: false
     });
   };
   res.error = ({ status = 422, data, message = 'Error', errors } = {}) => {
@@ -15,14 +16,16 @@ export const httpResponse = (req: Request, res: Response, next: NextFunction) =>
       message,
       data,
       status,
+      success: false
     });
   };
-  res.badreq = ({ status = 401, data, message = 'Bad request', errors } = {}) => {
+  res.badreq = ({ status = 400, data, message = 'Bad request', errors } = {}) => {
     return res.status(status).error({
       errors,
       message,
       data,
       status,
+      success: false
     });
   };
   res.internal = ({ status = 500, data, message = 'Internal', errors } = {}) => {
@@ -31,6 +34,7 @@ export const httpResponse = (req: Request, res: Response, next: NextFunction) =>
       message,
       data,
       status,
+      success: false
     });
   };
   res.success = ({ status = 200, data, message = '', errors, ...customField } = {}) => {
@@ -39,6 +43,7 @@ export const httpResponse = (req: Request, res: Response, next: NextFunction) =>
       message,
       data,
       status,
+      success: true,
       ...customField,
     });
   };

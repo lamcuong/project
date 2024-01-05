@@ -1,4 +1,4 @@
-import { injectable } from 'inversify';
+import { id, injectable } from 'inversify';
 import bcrypt, { genSalt } from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import UserModel from '@/mongo/schemas/user';
@@ -26,7 +26,9 @@ export class UserService {
       return undefined;
     }
     const token = jwt.sign({ _id: user._id.toString() }, process.env.SECRET_KEY ?? '');
-    return token;
+    return {
+      token
+    }
   };
   public me = async (id: string) => {
     const user = await UserModel.findById(id);

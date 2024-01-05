@@ -1,8 +1,8 @@
-import { inject, injectable } from 'inversify';
-import { Request, Response } from 'express';
-import { removeIfNotExist } from '@/utils/lodash';
-import { UserService } from '@/services/user';
-import UserModel from '@/mongo/schemas/user';
+import { inject, injectable } from "inversify";
+import { Request, Response } from "express";
+import { removeIfNotExist } from "@/utils/lodash";
+import { UserService } from "@/services/user";
+import UserModel from "@/mongo/schemas/user";
 @injectable()
 export class UserController {
   @inject(UserService)
@@ -12,7 +12,7 @@ export class UserController {
     try {
       const { username, password } = req.body;
       const user = await UserModel.findOne({ username });
-      if (user) return res.badreq({ message: 'username is existed' });
+      if (user) return res.badreq({ message: "Tài khoản đã tồn tại" });
       const newUser = await this.userService.signUp(
         removeIfNotExist({
           username,
@@ -35,10 +35,10 @@ export class UserController {
         })
       );
       if (!data) {
-        return res.unauth({ message: 'Username or password is wrong' });
+        return res.unauth({ message: "Username or password is wrong" });
       }
       // @ts-ignore
-      return res.success({ token: data });
+      return res.success({ data });
     } catch (error) {
       return res.internal();
     }
@@ -62,7 +62,7 @@ export class UserController {
         avatar,
       });
       if (!data) {
-        return res.unauth({ message: 'Login Failed' });
+        return res.unauth({ message: "Login Failed" });
       }
       // @ts-ignore
       return res.success({ token: data });
