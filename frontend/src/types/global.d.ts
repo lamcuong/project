@@ -1,6 +1,6 @@
 declare global {
   interface BaseResponse<T> {
-    data?: T
+    data: T
     success: boolean
     message?: string
     status?: number
@@ -9,11 +9,18 @@ declare global {
     list: T[]
 
     paging: {
-      current_page?: number
-      total_page?: number
-      limit?: number
-      count?: number
+      current_page: number
+      total_page: number
+      limit: number
+      count: number
     }
+  }
+  interface BaseParams<T = any> {
+    limit?: number
+    page?: number
+    search?: string
+    input?: T
+    id?: string
   }
 }
 export {}

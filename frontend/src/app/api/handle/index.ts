@@ -34,6 +34,6 @@ export const handleRequest = async <ResponseData>(url: string, config?: AxiosReq
       toast({
         title: errorResponse.message
       })
-      return errorResponse
+      throw errorResponse
     })
 }

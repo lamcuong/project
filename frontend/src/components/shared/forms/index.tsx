@@ -47,12 +47,7 @@ export const accountForm = z.object({
       required_error: 'Tên tài khoản không được để trống'
     })
     .min(1, 'Tên tài khoản không được để trống'),
-  initialBalance: z
-    .string({
-      invalid_type_error: 'Số dư ban đầu chỉ được nhập số'
-    })
-    .min(1, 'Số dư ban đầu không được để trống')
-    .regex(/^[^\D]+$/, 'Số dư ban đầu chỉ được nhập số')
+  initialBalance: z.coerce.number().min(1, 'Số dư ban đầu không được để trống')
 })
 export const expenseForm = z.object({
   type: z.string().default('outcome'),

@@ -43,7 +43,7 @@ const SideBar: React.FC<SideBarProps> = () => {
               <div
                 onClick={() => {
                   deleteCookie('Authorization')
-                  router.push('/')
+                  router.push('/auth')
                 }}
                 className={
                   'hover:text-primary-foreground flex hover:bg-primary rounded-lg gap-3 items-center cursor-pointer '

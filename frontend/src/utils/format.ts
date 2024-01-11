@@ -1,5 +1,5 @@
 import moment from 'moment'
-export const handleFormatNumber = (number: string | number) => {
+export const handleFormatNumber = (number?: string | number) => {
   return Number(number).toLocaleString().replace(/,/g, '.')
 }
 export const formatVietnameseDate = (date: string | Date) => {

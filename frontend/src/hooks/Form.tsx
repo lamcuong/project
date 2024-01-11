@@ -14,7 +14,7 @@ import { UseFormReturn } from 'react-hook-form'
 type UseFormDialogProps = {
   form: UseFormReturn<any>
   fields: Field[]
-  onSubmit: (input: any) => Promise<void>
+  onSubmit: any
   title: string
   description?: string
   open: boolean

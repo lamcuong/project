@@ -1,6 +1,6 @@
 import '../../styles/_globals.scss'
 import type { Metadata } from 'next'
-import { Providers } from './providers'
+import { Provider } from '../utils/provider'
 import { cn } from '@/lib/utils'
 import NextTopLoader from 'nextjs-toploader'
 import { Inter } from 'next/font/google'
@@ -18,10 +18,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html suppressHydrationWarning lang='en'>
       <body className={cn('min-h-screen bg-background antialiased')}>
-        <Providers>
+        <Provider>
           <NextTopLoader crawlSpeed={0} crawl={false} />
           <main className={inter.className}>{children}</main>
-        </Providers>
+        </Provider>
       </body>
     </html>
   )
