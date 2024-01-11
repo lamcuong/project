@@ -82,7 +82,7 @@ export class ExpenseService {
       },
       {
         $facet: {
-          data: [{ $skip: skip }, { $limit: limit }],
+          data: [],
           total: [{ $count: 'count' }],
         },
       },
