@@ -1,8 +1,5 @@
 'use client'
 import { Separator } from '@/components/ui/separator'
-import { Skeleton } from '@/components/ui/skeleton'
-import { useGetDetailQuery } from '@/store/apis/accountApi'
-import { useCreateExpenseMutation, useFetchExpenseQuery } from '@/store/apis/expenseApi'
 import { handleFormatNumber } from '@/utils/format'
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -17,6 +14,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useToast } from '@/components/ui/use-toast'
 import { MoveLeft, PlusIcon } from 'lucide-react'
 import Link from 'next/link'
+import { accountApi } from '@/app/api/account'
+import { expenseApi } from '@/app/api/expense'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { ExpenseInput } from '@/types/expense'
+import { useQueryClient } from '@tanstack/react-query'
+import { accountKeys, expenseKeys } from '@/utils/QueryKeyFactory'
 type AccountDetailProps = {}
 const expenseTypeOptions = [
   {
@@ -90,13 +93,21 @@ const incomeOptions = [
   }
 ]
 const AccountDetail: React.FC<AccountDetailProps> = () => {
+  const queryClient = useQueryClient()
   const { toast } = useToast()
   const { id } = useParams()
   const [open, setOpen] = useState<boolean>(false)
-  const { data: list, isFetching: isFetchingList } = useFetchExpenseQuery(id)
-  const { data, isLoading, refetch } = useGetDetailQuery(id)
   const [overallType] = useState('all')
-  const [create] = useCreateExpenseMutation()
+  const { data: account } = useQuery({
+    queryKey: accountKeys.detail(id as string),
+    queryFn: () => accountApi.detail(id as string)
+  })
+
+  const { data: expenses } = useQuery({
+    queryKey: expenseKeys.list({}),
+    queryFn: () => expenseApi.list(id as string)
+  })
+
   const form = useForm<z.infer<typeof expenseForm>>({
     resolver: zodResolver(expenseForm),
     defaultValues: {
@@ -108,78 +119,35 @@ const AccountDetail: React.FC<AccountDetailProps> = () => {
       type: 'outcome'
     }
   })
+  const { mutate: createExpense } = useMutation({
+    mutationFn: (input: ExpenseInput) => expenseApi.create(input),
+    onSuccess: (response) => {
+      queryClient.invalidateQueries({ queryKey: expenseKeys.all })
+      toast({
+        // @ts-ignore
+        title: (
+          <div>
+            <p>Thêm giao dịch mới thành công</p>
+            <Separator className='bg-neutral-200 my-3 w-full' />
+          </div>
+        ),
+        description: (
+          <div>
+            <p>Hạng mục: {response.data.category}</p>
+            <p className='mt-2'>
+              {response.data.type === 'income' ? 'Thu tiền' : 'Chi tiền'}:{' '}
+              {handleFormatNumber(response.data.transaction?.amount!)} VND
+            </p>
+          </div>
+        )
+      })
+      setOpen(false)
+      form.reset({})
+    }
+  })
   const onCreateExpense = async (value: z.infer<typeof expenseForm>) => {
-    const data = await create({ ...value, account_id: id }).unwrap()
-    toast({
-      // @ts-ignore
-      title: (
-        <div>
-          <p>Thêm giao dịch mới thành công</p>
-          <Separator className='bg-neutral-200 my-3 w-full' />
-        </div>
-      ),
-      description: (
-        <div>
-          <p>Hạng mục: {data.category}</p>
-          <p className='mt-2'>
-            {data.type === 'income' ? 'Thu tiền' : 'Chi tiền'}: {handleFormatNumber(data.transaction?.amount!)} VND
-          </p>
-        </div>
-      )
-    })
-    refetch()
-    setOpen(false)
-    form.reset({})
+    createExpense({ ...value, account_id: id as string })
   }
-  // useEffect(() => {
-  //   let placeholder = ''
-  //   switch (form.getValues().category) {
-  //     case 'Ăn uống':
-  //       placeholder = 'Ví dụ: Tiền ăn trưa, ăn tối, đi cf, ....'
-  //       break
-  //     case 'Dịch vụ sinh hoạt':
-  //       placeholder = 'Ví dụ: Tiền điện, tiền điện thoại, tiền internet, ....'
-  //       break
-  //     case 'Đi lại':
-  //       placeholder = 'Ví dụ: Xăng xe, gửi xe, taxi, ....'
-  //       break
-  //     case 'Con cái':
-  //       placeholder = 'Ví dụ: Tiền học của "..", tiền tiêu vặt, mua đồ chơi, ....'
-  //       break
-  //     case 'Hiếu hỉ':
-  //       placeholder = 'Ví dụ: Đám cưới của " .... ", thăm hỏi, biếu tặng, ....'
-  //       break
-  //     case 'Mua sắm':
-  //       placeholder = 'Ví dụ: Mua quần áo, mua điện thoại, ....'
-  //       break
-  //     case 'Sức khoẻ':
-  //       placeholder = 'Ví dụ: Tiền khám bệnh, tiền thuốc, thể thao, ....'
-  //       break
-  //     case 'Nhà cửa':
-  //       placeholder = 'Ví dụ: Tiền thuê nhà, mua đồ dùng, sửa nhà, ....'
-  //       break
-  //     case 'Hưởng thụ':
-  //       placeholder = 'Ví dụ: Đi spa, du lịch, làm đẹp, ....'
-  //       break
-  //     case 'Phát triển bản thân':
-  //       placeholder = 'Ví dụ: Tiền học khoá "...", mua đồ, ....'
-  //       break
-  //     // -------- Income --------
-  //     case 'Lương thưởng':
-  //       placeholder = 'Ví dụ: Tiền làm thêm, thưởng tết, ....'
-  //       break
-  //     case 'Kinh doanh':
-  //       placeholder = 'Ví dụ: Bán hàng online, ....'
-  //       break
-  //     case 'Đầu tư':
-  //       placeholder = 'Ví dụ: Cổ phiếu, Bitcoin, ....'
-  //       break
-  //   }
-  //   // setPlaceholer(placeholder)
-  //   form.setValue('placeholder', placeholder, {
-  //     shouldTouch: true
-  //   })
-  // }, [form])
   const { render: renderForm } = useFormDialog({
     fields: [
       {
@@ -243,27 +211,20 @@ const AccountDetail: React.FC<AccountDetailProps> = () => {
           </div>
           <h1 className='text-center text-lg font-semibold'>Chi tiết tài khoản</h1>
           <div>
-            {isLoading ? (
-              <div className='mt-5 w-full'>
-                <Skeleton className='h-10' times={1} gap={0} />
-                <div className='mt-5'>
-                  <Skeleton className='h-5' times={5} gap={5} />
-                </div>
-              </div>
-            ) : (
+            {
               <>
                 <div className='mt-5 flex justify-between gap-4 '>
                   <div className='flex-1 break-all hidden sm:block'>
                     <p className='text-md font-[500] mb-1'> Tài khoản:</p>
-                    <p className='text-sm'>{data?.data.name}</p>
+                    <p className='text-sm'>{account?.data?.name}</p>
                   </div>
                   <div className='flex-1'>
                     <p className='text-md font-[500] mb-1'> Số dư ban đầu:</p>
-                    <p className='text-sm'>{handleFormatNumber(data?.data.initialBalance)} VND</p>
+                    <p className='text-sm'>{handleFormatNumber(account?.data?.initialBalance)} VND</p>
                   </div>
                   <div className='flex-1'>
                     <p className='text-md font-[500] mb-1'> Số dư hiện tại:</p>
-                    <p className='text-sm'>{handleFormatNumber(data?.data.balance)} VND</p>
+                    <p className='text-sm'>{handleFormatNumber(account?.data?.balance)} VND</p>
                   </div>
                 </div>
                 <Separator className='bg-neutral-300 my-3' />
@@ -285,19 +246,14 @@ const AccountDetail: React.FC<AccountDetailProps> = () => {
                 </div>
                 <h2 className='text-left font-[600] text-lg'>Lịch sử giao dịch</h2>
                 <div className='mt-5'>
-                  {list?.list.length! > 0 ? (
-                    <List
-                      overallType={overallType}
-                      data={list?.list!}
-                      paging={list?.paging}
-                      isFetching={isFetchingList}
-                    />
+                  {expenses?.data?.list?.length! > 0 ? (
+                    <List overallType={overallType} data={expenses?.data?.list!} paging={expenses?.data?.paging} />
                   ) : (
                     <p className='text-3xl text-center mt-20'>Chưa có giao dịch nào</p>
                   )}
                 </div>
               </>
-            )}
+            }
           </div>
         </div>
       </div>

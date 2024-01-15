@@ -49,7 +49,6 @@ export class AccountController {
       const data = await this.accountService.detail(account_id, req.user.id!);
       return res.success({ data });
     } catch (error) {
-      console.log(error);
       return res.internal();
     }
   };

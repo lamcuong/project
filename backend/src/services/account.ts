@@ -2,7 +2,7 @@ import { id, injectable } from 'inversify';
 import AccountModel from '../mongo/schemas/account';
 import ExpenseModel from '@/mongo/schemas/expense';
 import mongoose, { mongo } from 'mongoose';
-@injectable()
+  @injectable()
 export class AccountService {
   regex = (pattern: string) => new RegExp(`.*${pattern}.*`);
   public create = async (input: AccountInput) => {

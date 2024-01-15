@@ -2,7 +2,6 @@
 import React from 'react'
 import Avatar from '../assets/Avatar.jpg'
 import Image from 'next/image'
-import { useMeQuery } from '@/store/apis/authApi'
 import { useRouter } from 'next/navigation'
 import { List, LogOut } from 'lucide-react'
 import { deleteCookie } from 'cookies-next'
@@ -10,14 +9,13 @@ import { deleteCookie } from 'cookies-next'
 type SideBarProps = {}
 
 const SideBar: React.FC<SideBarProps> = () => {
-  const { data } = useMeQuery(null)
   const router = useRouter()
 
   return (
     <div className='sidebar h-full w-[var(--sidebar-width)] left-0 duration-300 flex flex-col'>
       <div className='flex justify-center gap-5 py-8 bg-muted '>
         <div>
-          <Image src={data?.avatar! || Avatar} alt='...' className='rounded-lg sidebar-avatar' />
+          <Image src={Avatar} alt='...' className='rounded-lg sidebar-avatar' />
         </div>
       </div>
 
@@ -45,7 +43,7 @@ const SideBar: React.FC<SideBarProps> = () => {
               <div
                 onClick={() => {
                   deleteCookie('Authorization')
-                  router.push('/')
+                  router.push('/auth')
                 }}
                 className={
                   'hover:text-primary-foreground flex hover:bg-primary rounded-lg gap-3 items-center cursor-pointer '

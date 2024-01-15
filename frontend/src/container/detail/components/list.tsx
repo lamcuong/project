@@ -3,15 +3,15 @@ import moment from 'moment'
 import React, { useMemo } from 'react'
 import Item from './item'
 import _ from 'lodash'
+import { ExpenseInterface } from '@/types/expense'
 
 type ListProps = {
-  data: Expense[]
+  data: ExpenseInterface[]
   paging?: Paging
   overallType: string
-  isFetching?: boolean
 }
 
-const List: React.FC<ListProps> = ({ paging, data, isFetching, overallType }) => {
+const List: React.FC<ListProps> = ({ paging, data, overallType }) => {
   // const groupedList = data?.reduce((groups: any, item) => {
   //   const date = moment(item.transaction?.date).format('[Ngày] DD [Tháng] MM [Năm] YYYY');
   //   if (!groups[date]) {

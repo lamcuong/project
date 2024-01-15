@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { accountForm } from '@/components/shared/forms'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAddAccountMutation, useDeleteAccountMutation, useFetchAccountQuery } from '@/store/apis/accountApi'
 import { useFormDialog } from '@/hooks/Form'
 import { toast } from '@/components/ui/use-toast'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -18,27 +17,32 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-  AlertDialogTrigger,
-  AlertDialogCancel
+  AlertDialogCancel,
+  AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import EmptyState from './components/emptyState'
 import Link from 'next/link'
-
+import { accountApi } from '@/app/api/account'
+import { AccountInput, AccountInterface } from '@/types/account'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { accountKeys } from '@/utils/QueryKeyFactory'
 type AccountProps = {}
 
 const Account: React.FC<AccountProps> = () => {
+  const queryClient = useQueryClient()
+
   const [open, setOpen] = useState(false)
   const [searchTerm] = useState<string>('')
   const [paging, setPaging] = useState<any>({
     page: 1,
     limit: 10
   })
-  const { data, isLoading } = useFetchAccountQuery({
-    limit: paging.limit,
-    page: paging.page,
-    search: searchTerm
+  const { data: accounts, isLoading } = useQuery({
+    queryKey: accountKeys.list({ paging, searchTerm }),
+    queryFn: () => accountApi.list({ limit: paging.limit, page: paging.page, search: searchTerm }),
+    placeholderData: keepPreviousData
   })
   const onChangePage = async (page: string | number) => {
     setPaging((prevValue: any) => ({ ...prevValue, page }))
@@ -47,12 +51,10 @@ const Account: React.FC<AccountProps> = () => {
     setPaging((prevValue: any) => ({ ...prevValue, limit }))
   }
 
-  const [create] = useAddAccountMutation()
-  const [remove] = useDeleteAccountMutation()
   const form = useForm<z.infer<typeof accountForm>>({
     resolver: zodResolver(accountForm),
     defaultValues: {
-      initialBalance: '0',
+      initialBalance: 0,
       name: ''
     }
   })
@@ -66,7 +68,8 @@ const Account: React.FC<AccountProps> = () => {
     {
       name: 'initialBalance',
       type: 'number',
-      label: 'Số dư ban đầu'
+      label: 'Số dư ban đầu',
+      inputTextProps: { useGrouping: true }
     }
   ]
   const renderPagination = () => {
@@ -74,47 +77,55 @@ const Account: React.FC<AccountProps> = () => {
       <Pagination
         pageSize={paging.limit}
         onChangePage={onChangePage}
-        count={data?.paging.count}
-        current_page={data?.paging.current_page}
+        count={accounts?.data?.paging.count}
+        current_page={accounts?.data?.paging.current_page}
         onSizeChange={onSizeChange}
       />
     )
   }
-  const onDeleteAccount = async (account: AccountInterface) => {
-    await remove(account.id)
-    toast({
-      title: `Xoá thành công tài khoản ${account.name}`
-    })
-  }
-  const onCreateAccount = async (value: z.infer<typeof accountForm>) => {
-    const account = await create(value).unwrap()
-    form.reset({})
-    setOpen(false)
-    toast({
-      // @ts-ignore
-      title: (
-        <div>
-          <p>Thêm mới tài khoản thành công!</p>
-          <Separator className='bg-neutral-200 my-3 w-full' />
-        </div>
-      ),
-      description: (
-        <div>
-          <p>Tên tài khoản: {account.data.name}</p>
-          <p className='mt-2'>
-            Số dư ban đầu: {Number(account.data.initialBalance)?.toLocaleString().replace(/,/g, '.')} VND
-          </p>
-        </div>
-      )
-    })
-  }
+
+  const { mutate: createAccount, isPending } = useMutation({
+    mutationFn: (value: AccountInput) => accountApi.create(value),
+    onSuccess: async (account) => {
+      await queryClient.invalidateQueries({ queryKey: accountKeys.all })
+      form.reset({})
+      setOpen(false)
+      toast({
+        // @ts-ignore
+        title: (
+          <div>
+            <p>Thêm mới tài khoản thành công!</p>
+            <Separator className='bg-neutral-200 my-3 w-full' />
+          </div>
+        ),
+        description: (
+          <div>
+            <p>Tên tài khoản: {account.data.name}</p>
+            <p className='mt-2'>
+              Số dư ban đầu: {Number(account.data.initialBalance)?.toLocaleString().replace(/,/g, '.')} VND
+            </p>
+          </div>
+        )
+      })
+    }
+  })
+  const { mutate: deleteAccount, isPending: isPendingDelete } = useMutation({
+    mutationFn: (account: AccountInterface) => accountApi.remove(account.id),
+    onSuccess: async (_, account) => {
+      await queryClient.invalidateQueries({ queryKey: accountKeys.all })
+      toast({
+        title: `Xoá thành công tài khoản ${account.name}`
+      })
+    }
+  })
   const { render } = useFormDialog({
     form,
     fields,
-    onSubmit: onCreateAccount,
+    onSubmit: createAccount,
     title: 'Tạo tài khoản chi tiêu',
     open,
-    setOpen
+    setOpen,
+    loading: isPending
   })
   return (
     <div>
@@ -127,7 +138,7 @@ const Account: React.FC<AccountProps> = () => {
             <Skeleton className='h-10' times={5} gap={5} />
           </div>
         </div>
-      ) : data?.list.length! > 0 ? (
+      ) : accounts?.data?.list.length! > 0 ? (
         <>
           <div className='flex justify-between items-center'>
             <h1 className='text-xl'>Quản lý chi tiêu</h1>
@@ -151,7 +162,7 @@ const Account: React.FC<AccountProps> = () => {
               </TableRow>
             </TableHeader>
             <TableBody className='break-words'>
-              {data?.list.map((item: any, index: any) => (
+              {accounts?.data?.list.map((item: AccountInterface, index: number) => (
                 <TableRow key={item.id}>
                   <TableCell className='font-medium hidden md:table-cell'>{index + 1}</TableCell>
                   <TableCell>{item.name}</TableCell>
@@ -169,9 +180,9 @@ const Account: React.FC<AccountProps> = () => {
                         <Button className='w-full'>Chi tiết</Button>
                       </Link>
                     </div>
-                    <AlertDialog>
+                    <AlertDialog key={item?.id}>
                       <AlertDialogTrigger asChild>
-                        <Button variant={'destructive'} className='w-full'>
+                        <Button variant='destructive' className='w-full'>
                           Xoá
                         </Button>
                       </AlertDialogTrigger>
@@ -184,9 +195,10 @@ const Account: React.FC<AccountProps> = () => {
                         </AlertDialogHeader>
                         <AlertDialogFooter className='gap-2 w-1/2 mx-auto sm:w-full'>
                           <Button
+                            disabled={isPendingDelete}
                             variant='destructive'
                             onClick={() => {
-                              onDeleteAccount(item)
+                              deleteAccount(item)
                             }}
                           >
                             Xác nhận

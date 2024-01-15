@@ -7,53 +7,48 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ShowPassword } from '../assets/eye'
-import { useSignInMutation } from '@/store/apis/authApi'
+// import { useSignInMutation } from '@/store/apis/authApi'
 import { setCookie } from 'cookies-next'
 import { RotateCw } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { signInForm } from '@/components/shared/forms'
-import { Alert, AlertDescription } from '@/components/ui/alert'
 import { CardHeader } from '@/components/ui/card'
+import { userApi } from '@/app/api/user/index'
+import { useMutation } from '@tanstack/react-query'
+import { UserInterface } from '@/types/user'
 type SignInProps = {}
 
 const SignIn: React.FC<SignInProps> = () => {
-  const [logIn] = useSignInMutation()
+  // const [logIn] = useSignInMutation()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isShow, setisShow] = useState<boolean>(false)
-  const [isError, setIsError] = useState<boolean>(false)
   const route = useRouter()
   const form = useForm<z.infer<typeof signInForm>>({
-    resolver: zodResolver(signInForm)
+    resolver: zodResolver(signInForm),
+    defaultValues: {
+      password: '',
+      username: ''
+    }
+  })
+  const { mutate: signIn } = useMutation({
+    mutationFn: (input: UserInterface) => userApi.signIn(input),
+    onSuccess: (data) => {
+      setCookie('Authorization', data.data?.token)
+    },
+    onError: () => {
+      setIsLoading(false)
+    }
   })
   const onSubmit = (value: z.infer<typeof signInForm>) => {
     setIsLoading(true)
-    logIn(value)
-      .unwrap()
-      .then((res) => {
-        // @ts-ignore
-        if (res.status === 200) {
-          setIsError(false)
-          // @ts-ignore
-          setCookie('Authorization', res.token)
-          route.push('/')
-        } else {
-          setIsError(true)
-        }
-      })
-      .catch(() => {
-        setIsError(true)
-        setIsLoading(false)
-      })
+    signIn(value, {
+      onSuccess: () => route.push('/')
+    })
   }
   return (
     <Form {...form}>
       <CardHeader className='text-secondary-foreground text-2xl '>Đăng nhập</CardHeader>
       <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-3 w-full '>
-        {isError && (
-          <Alert className='bg-white'>
-            <AlertDescription className='text-center font-[500]'>Tài khoản hoặc mật khẩu không đúng</AlertDescription>
-          </Alert>
-        )}
         <FormField
           control={form.control}
           name='username'
