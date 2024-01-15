@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import NextTopLoader from 'nextjs-toploader'
 import { Inter } from 'next/font/google'
 
-export const inter = Inter({
+const inter = Inter({
   subsets: ['latin'],
   weight: '400'
 })

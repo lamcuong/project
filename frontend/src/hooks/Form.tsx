@@ -10,7 +10,6 @@ import { formatVietnameseDate } from '@/utils/format'
 import { CalendarDays } from 'lucide-react'
 import React, { useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
-import { RotateCw } from 'lucide-react'
 
 type UseFormDialogProps = {
   form: UseFormReturn<any>

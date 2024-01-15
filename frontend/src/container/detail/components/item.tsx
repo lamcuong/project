@@ -8,11 +8,12 @@ import _ from 'lodash'
 import { cn } from '@/lib/utils'
 import moment from 'moment'
 import { usePathname, useRouter } from 'next/navigation'
+import { ExpenseInterface } from '@/types/expense'
 type ItemProps = {
   date: string
   groupedList: any
   index?: number
-  groupedByDate: Record<string, Expense[]>
+  groupedByDate: Record<string, ExpenseInterface[]>
   month?: string | number
   overallType: string
   overallList: any
@@ -34,7 +35,7 @@ const Item: React.FC<ItemProps> = ({ date, groupedList, index, groupedByDate }) 
     [path, router]
   )
   const totalAmount = useMemo(() => {
-    return groupedByDate[date].reduce((currentAmount: number, item: Expense) => {
+    return groupedByDate[date].reduce((currentAmount: number, item: ExpenseInterface) => {
       const amount = item.type === 'income' ? item.transaction?.amount : -item.transaction?.amount!
       return currentAmount + amount!
     }, 0)
@@ -70,10 +71,13 @@ const Item: React.FC<ItemProps> = ({ date, groupedList, index, groupedByDate }) 
       <CollapsibleContent className=' bg-neutral-100 space-y-1 CollapsibleContent'>
         <div className='md:max-w-[90%] mx-auto my-3 break-words'>
           {Object.keys(groupedList[date]).map((category, index, array) => {
-            const categoryAmount = groupedList[date][category].reduce((initialValue: number, item: Expense) => {
-              const amount = item.type === 'income' ? item.transaction?.amount : -item.transaction?.amount!
-              return initialValue + Number(amount)
-            }, 0)
+            const categoryAmount = groupedList[date][category].reduce(
+              (initialValue: number, item: ExpenseInterface) => {
+                const amount = item.type === 'income' ? item.transaction?.amount : -item.transaction?.amount!
+                return initialValue + Number(amount)
+              },
+              0
+            )
             return (
               <div key={index}>
                 <div className='bg-neutral-200 p-2 font-[400] text-lg flex justify-between items-center '>
@@ -86,7 +90,7 @@ const Item: React.FC<ItemProps> = ({ date, groupedList, index, groupedByDate }) 
                   </p>
                 </div>
 
-                {groupedList[date][category].map((item: Expense, index: number, array: any) => {
+                {groupedList[date][category].map((item: ExpenseInterface, index: number, array: any) => {
                   const amount = item.type === 'income' ? item.transaction?.amount : -item.transaction?.amount!
                   return (
                     <div className='pl-5 pr-2 my-2' key={item.id}>

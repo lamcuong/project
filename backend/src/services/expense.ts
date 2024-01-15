@@ -23,7 +23,7 @@ export class ExpenseService {
   };
   public update = async (expense_id: ExpenseCore.ID, account_id: ExpenseCore.ID, input: ExpenseInput) => {
     const expense = await (
-      await ExpenseModel.findOneAndUpdate({ _id: expense_id, account: account_id }, input)
+      await ExpenseModel.findOneAndUpdate({ _id: expense_id, account: account_id }, {$set:input})
     )?.populate('account');
     if (!expense) throw new Error('Not found');
     if (input.transaction?.amount !== expense.transaction?.amount || input.type !== expense.type) {
