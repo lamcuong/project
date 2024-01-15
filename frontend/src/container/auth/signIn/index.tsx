@@ -34,15 +34,16 @@ const SignIn: React.FC<SignInProps> = () => {
     mutationFn: (input: UserInterface) => userApi.signIn(input),
     onSuccess: (data) => {
       setCookie('Authorization', data.data?.token)
-      route.push('/')
     },
-    onSettled: () => {
+    onError: () => {
       setIsLoading(false)
     }
   })
   const onSubmit = (value: z.infer<typeof signInForm>) => {
     setIsLoading(true)
-    signIn(value)
+    signIn(value, {
+      onSuccess: () => route.push('/')
+    })
   }
   return (
     <Form {...form}>

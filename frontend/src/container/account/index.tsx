@@ -84,10 +84,10 @@ const Account: React.FC<AccountProps> = () => {
     )
   }
 
-  const { mutate: createAccount } = useMutation({
+  const { mutate: createAccount, isPending } = useMutation({
     mutationFn: (value: AccountInput) => accountApi.create(value),
-    onSuccess: (account) => {
-      queryClient.invalidateQueries({ queryKey: accountKeys.all })
+    onSuccess: async (account) => {
+      await queryClient.invalidateQueries({ queryKey: accountKeys.all })
       form.reset({})
       setOpen(false)
       toast({
@@ -109,10 +109,10 @@ const Account: React.FC<AccountProps> = () => {
       })
     }
   })
-  const { mutate: deleteAccount } = useMutation({
+  const { mutate: deleteAccount, isPending: isPendingDelete } = useMutation({
     mutationFn: (account: AccountInterface) => accountApi.remove(account.id),
-    onSuccess: (_, account) => {
-      queryClient.invalidateQueries({ queryKey: accountKeys.all })
+    onSuccess: async (_, account) => {
+      await queryClient.invalidateQueries({ queryKey: accountKeys.all })
       toast({
         title: `Xoá thành công tài khoản ${account.name}`
       })
@@ -124,7 +124,8 @@ const Account: React.FC<AccountProps> = () => {
     onSubmit: createAccount,
     title: 'Tạo tài khoản chi tiêu',
     open,
-    setOpen
+    setOpen,
+    loading: isPending
   })
   return (
     <div>
@@ -194,6 +195,8 @@ const Account: React.FC<AccountProps> = () => {
                         </AlertDialogHeader>
                         <AlertDialogFooter className='gap-2 w-1/2 mx-auto sm:w-full'>
                           <Button
+                            disabled={isPendingDelete}
+                            variant='destructive'
                             onClick={() => {
                               deleteAccount(item)
                             }}

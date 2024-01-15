@@ -10,6 +10,7 @@ import { formatVietnameseDate } from '@/utils/format'
 import { CalendarDays } from 'lucide-react'
 import React, { useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
+import { RotateCw } from 'lucide-react'
 
 type UseFormDialogProps = {
   form: UseFormReturn<any>
@@ -19,6 +20,7 @@ type UseFormDialogProps = {
   description?: string
   open: boolean
   setOpen: any
+  loading?: boolean
 }
 
 export const useFormDialog = (props: UseFormDialogProps) => {
@@ -129,7 +131,7 @@ export const useFormDialog = (props: UseFormDialogProps) => {
             <form onSubmit={form.handleSubmit(onSubmit)}>
               {dynamicFields}
               <div className='pt-8 flex justify-end gap-2'>
-                <Button className='rounded-radius' type='submit'>
+                <Button disabled={props.loading} className='rounded-radius' type='submit'>
                   Lưu thông tin
                 </Button>
                 <Button
