@@ -1,15 +1,13 @@
 version: '3.8'
 services:
   backend:
-    image: wenlygohb/backend:v5
+    image: wenlygohb/expense-be:v1
     ports:
       - 4000:4000
     env_file:
-      - ./backend/.env
+      - ../backend/.env
   frontend:
-    image: wenlygohb/frontend:v2.0
-    env_file:
-      - ./frontend/.env
+    image: wenlygohb/expense-fe:v1.0.4
     ports:
       - 3005:3005
 

@@ -1,9 +1,8 @@
 import mongoose from 'mongoose';
 export const defaultPlugin = (schema: mongoose.Schema) => {
-  schema.virtual('id').get(function getId() {
-    // @ts-ignore
-    return this._id.toHexString();
-  });
+  // schema.virtual('id').get(function getId() {
+  //   return this._id.toHexString();
+  // });
 
   schema.set('toJSON', {
     virtuals: true,

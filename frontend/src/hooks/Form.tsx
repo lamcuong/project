@@ -7,19 +7,20 @@ import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Select, SelectItem, SelectTrigger, SelectValue, SelectContent } from '@/components/ui/select'
 import { formatVietnameseDate } from '@/utils/format'
-import { isNaN } from 'lodash'
 import { CalendarDays } from 'lucide-react'
 import React, { useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
+import { RotateCw } from 'lucide-react'
 
 type UseFormDialogProps = {
   form: UseFormReturn<any>
   fields: Field[]
-  onSubmit: (input: any) => Promise<void>
+  onSubmit: any
   title: string
   description?: string
   open: boolean
   setOpen: any
+  loading?: boolean
 }
 
 export const useFormDialog = (props: UseFormDialogProps) => {
@@ -32,22 +33,19 @@ export const useFormDialog = (props: UseFormDialogProps) => {
         const { value, onChange, name } = props
         switch (item.type) {
           case 'number':
+            const numberValue = item.inputTextProps?.useGrouping
+              ? Number(value).toLocaleString().replace(/,/g, '.')
+              : Number(value)
             return (
               <Input
-                name={name}
-                value={Number(value).toLocaleString().replace(/,/g, '.') || ''}
+                value={numberValue == 0 ? '' : numberValue}
                 onChange={(e) => {
                   const parsedValue = e.target.value.replace(/\./g, '')
-                  // console.log('bb', parsedValue);
-                  // console.log('e.target.value:', e.target.value.replace(/\./g, ''));
-                  // console.log('123', isFinite(Number(parsedValue)));
-                  // console.log('va;ue', value);
                   if (!isNaN(Number(parsedValue))) {
                     onChange(e.target.value.replaceAll('.', ''))
                   }
                 }}
                 type='text'
-                // {...props}
               />
             )
           case 'select':
@@ -133,11 +131,12 @@ export const useFormDialog = (props: UseFormDialogProps) => {
             <form onSubmit={form.handleSubmit(onSubmit)}>
               {dynamicFields}
               <div className='pt-8 flex justify-end gap-2'>
-                <Button className='rounded-radius' type='submit'>
+                <Button disabled={props.loading} className='rounded-radius' type='submit'>
                   Lưu thông tin
                 </Button>
                 <Button
-                  className='rounded-radius bg-secondary text-secondary-foreground'
+                  className='rounded-radius'
+                  variant='secondary'
                   type='button'
                   onClick={() => {
                     setOpen(false)

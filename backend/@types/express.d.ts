@@ -15,6 +15,7 @@ declare global {
       message?: string;
       data?: T;
       errors?: V;
+      success?: boolean
     }
 
     interface Response<ResBody = any, Locals extends Record<string, any> = Record<string, any>> {

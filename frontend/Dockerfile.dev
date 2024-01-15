@@ -3,7 +3,6 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-ENV NEXT_PUBLIC_PORT=hehehehe
 EXPOSE 3005
 CMD [ "npm", "run", "dev" ]
 # CMD [ "node", "-v" ]

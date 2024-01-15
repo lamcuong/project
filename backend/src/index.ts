@@ -20,7 +20,7 @@ connectMongo()
     app.use(httpResponse);
 
     app.use(helmet());
-    app.use(cors({ origin: '*', methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'] }));
+    app.use(cors());
 
     app.use('/api/', route);
     app.get('/', async (req, res) => {

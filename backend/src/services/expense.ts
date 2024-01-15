@@ -89,7 +89,7 @@ export class ExpenseService {
     ]);
     const count = list[0].total[0]?.count;
     return {
-      data: list[0].data,
+      list: list[0].data,
       paging: {
         current_page: page,
         total_page: Math.ceil(count / limit),
