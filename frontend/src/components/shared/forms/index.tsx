@@ -53,7 +53,7 @@ export const expenseForm = z.object({
   type: z.string().default('outcome'),
   transaction: z.object({
     description: z.string(),
-    date: z.date().default(new Date()),
+    date: z.coerce.date().default(new Date()),
     amount: z.coerce.number().min(1, 'Số tiền không được để trống')
   }),
   category: z.string().min(1, 'Hạng mục không được để trống')

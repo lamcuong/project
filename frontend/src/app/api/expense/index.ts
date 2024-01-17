@@ -13,7 +13,20 @@ const create = (data: ExpenseInput) => {
     data
   })
 }
+const update = (account_id: string, data: ExpenseInput) => {
+  return handleRequest<ExpenseResponse>(`${apiExpense}/update/${account_id}`, {
+    method: 'put',
+    data
+  })
+}
+const remove = (account_id: string, expense_id: string) => {
+  return handleRequest<ExpenseResponse>(`${apiExpense}/delete/account/${account_id}/expense/${expense_id}`, {
+    method: 'delete'
+  })
+}
 export const expenseApi = {
   list,
-  create
+  create,
+  update,
+  remove
 }

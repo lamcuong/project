@@ -9,17 +9,6 @@ import { toast } from '@/components/ui/use-toast'
 import { Skeleton } from '@/components/ui/skeleton'
 import { TableHeader, TableRow, TableHead, TableBody, TableCell, Table } from '@/components/ui/table'
 import Pagination from '@/components/ui/pagination'
-
-import {
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogTitle,
-  AlertDialogCancel,
-  AlertDialogTrigger
-} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import EmptyState from './components/emptyState'
@@ -28,12 +17,12 @@ import { accountApi } from '@/app/api/account'
 import { AccountInput, AccountInterface } from '@/types/account'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { accountKeys } from '@/utils/QueryKeyFactory'
+import { refresh } from '@/utils/utils'
+import { useConfirmDialog } from '@/hooks/ConfirmDialog'
 type AccountProps = {}
 
 const Account: React.FC<AccountProps> = () => {
   const queryClient = useQueryClient()
-
-  const [open, setOpen] = useState(false)
   const [searchTerm] = useState<string>('')
   const [paging, setPaging] = useState<any>({
     page: 1,
@@ -84,14 +73,12 @@ const Account: React.FC<AccountProps> = () => {
     )
   }
 
-  const { mutate: createAccount, isPending } = useMutation({
+  const { mutateAsync: createAccount } = useMutation({
     mutationFn: (value: AccountInput) => accountApi.create(value),
     onSuccess: async (account) => {
-      await queryClient.invalidateQueries({ queryKey: accountKeys.all })
-      form.reset({})
-      setOpen(false)
+      await refresh(queryClient, [{ queryKey: accountKeys.all }])
       toast({
-        // @ts-ignore
+        //@ts-ignore
         title: (
           <div>
             <p>Thêm mới tài khoản thành công!</p>
@@ -109,24 +96,31 @@ const Account: React.FC<AccountProps> = () => {
       })
     }
   })
-  const { mutate: deleteAccount, isPending: isPendingDelete } = useMutation({
+  const confirmDialog = useConfirmDialog()
+  const { mutateAsync: deleteAccount } = useMutation({
     mutationFn: (account: AccountInterface) => accountApi.remove(account.id),
     onSuccess: async (_, account) => {
-      await queryClient.invalidateQueries({ queryKey: accountKeys.all })
+      await refresh(queryClient, [{ queryKey: accountKeys.all }])
       toast({
         title: `Xoá thành công tài khoản ${account.name}`
       })
     }
   })
-  const { render } = useFormDialog({
+  const { render, create } = useFormDialog({
     form,
     fields,
-    onSubmit: createAccount,
-    title: 'Tạo tài khoản chi tiêu',
-    open,
-    setOpen,
-    loading: isPending
+    createItem: (item: AccountInput) => createAccount(item),
+    title: 'Tạo tài khoản chi tiêu'
   })
+  const handleDelete = (item: AccountInterface) => {
+    confirmDialog(
+      {
+        description: `Hành động này sẽ xoá tài khoản ${item.name} hoàn toàn khỏi hệ thống và không thể hoàn tác`,
+        title: `Chắc chắn muốn xoá tài khoản ${item.name} ?`
+      },
+      () => deleteAccount(item)
+    )
+  }
   return (
     <div>
       {render()}
@@ -138,7 +132,7 @@ const Account: React.FC<AccountProps> = () => {
             <Skeleton className='h-10' times={5} gap={5} />
           </div>
         </div>
-      ) : accounts?.data?.list.length! > 0 ? (
+      ) : accounts && accounts.data.list.length > 0 ? (
         <>
           <div className='flex justify-between items-center'>
             <h1 className='text-xl'>Quản lý chi tiêu</h1>
@@ -149,7 +143,7 @@ const Account: React.FC<AccountProps> = () => {
                 setSearchTerm(e.target.value)
               }, 500)}
             /> */}
-            <Button onClick={() => setOpen(true)}>Thêm tài khoản</Button>
+            <Button onClick={() => create()}>Thêm tài khoản</Button>
           </div>
           <Table className='border mt-10 table-fixed '>
             <TableHeader>
@@ -175,38 +169,19 @@ const Account: React.FC<AccountProps> = () => {
                     <p className='tracking-[0.5px]'>{Number(item.balance)?.toLocaleString().replace(/,/g, '.')} VND</p>
                   </TableCell>
                   <TableCell className='flex flex-col justify-center items-center xl:flex-row gap-2 p-3 sm:p-4 w-full sm:w-1/2 md:w-full 2xl:w-3/4 '>
-                    <div className='w-full'>
-                      <Link href={`/account/${item.id}`}>
+                    <div className='w-full flex gap-3'>
+                      <Link className='flex-1' href={`/account/${item.id}`}>
                         <Button className='w-full'>Chi tiết</Button>
                       </Link>
+                      <Button
+                        className='flex-1 !px-0'
+                        variant={'destructive'}
+                        type='button'
+                        onClick={() => handleDelete(item)}
+                      >
+                        Xoá
+                      </Button>
                     </div>
-                    <AlertDialog key={item?.id}>
-                      <AlertDialogTrigger asChild>
-                        <Button variant='destructive' className='w-full'>
-                          Xoá
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Chắc chắn muốn xoá tài khoản {item.name} ?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Hành động này sẽ xoá tài khoản {item.name} hoàn toàn khỏi hệ thống và không thể hoàn tác
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter className='gap-2 w-1/2 mx-auto sm:w-full'>
-                          <Button
-                            disabled={isPendingDelete}
-                            variant='destructive'
-                            onClick={() => {
-                              deleteAccount(item)
-                            }}
-                          >
-                            Xác nhận
-                          </Button>
-                          <AlertDialogCancel type='button'>Quay lại</AlertDialogCancel>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
                   </TableCell>
                 </TableRow>
               ))}
@@ -215,7 +190,7 @@ const Account: React.FC<AccountProps> = () => {
           <div className='mt-10 flex gap-3 justify-end'>{renderPagination()}</div>
         </>
       ) : (
-        <EmptyState setOpen={setOpen} />
+        <EmptyState create={create} />
       )}
     </div>
   )

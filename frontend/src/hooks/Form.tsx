@@ -7,25 +7,59 @@ import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Select, SelectItem, SelectTrigger, SelectValue, SelectContent } from '@/components/ui/select'
 import { formatVietnameseDate } from '@/utils/format'
-import { CalendarDays } from 'lucide-react'
 import React, { useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 
 type UseFormDialogProps = {
   form: UseFormReturn<any>
   fields: Field[]
-  onSubmit: any
   title: string
   description?: string
-  open: boolean
-  setOpen: any
+
   loading?: boolean
+  createItem?: (item?: any) => Promise<any>
+  updateItem?: (item?: any) => void
 }
 
 export const useFormDialog = (props: UseFormDialogProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [openPopover, setOpenPopover] = useState<boolean>(false)
-  const { form, fields, onSubmit, title, description, open, setOpen } = props
-
+  const [isUpdate, setIsUpdate] = useState<boolean>(false)
+  const { form, fields, title, description, createItem, updateItem } = props
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const setValue = (value: any) => {
+    form.reset(value, { keepDefaultValues: true })
+  }
+  const create = (defaultValue?: any) => {
+    setValue(defaultValue)
+    setIsUpdate(false)
+    setIsOpen(true)
+  }
+  const update = (item: any) => {
+    setValue(item)
+    setIsUpdate(true)
+    setIsOpen(true)
+  }
+  const onSubmit = () => {
+    setIsLoading(true)
+    let mutateAsync
+    if (isUpdate) {
+      mutateAsync = updateItem?.(form.getValues())
+    } else {
+      mutateAsync = createItem?.(form.getValues())
+    }
+    if (mutateAsync) {
+      mutateAsync
+        .then(() => {
+          setIsOpen(false)
+          form.reset()
+        })
+        .catch(() => {})
+        .finally(() => {
+          setIsLoading(false)
+        })
+    }
+  }
   const render = () => {
     const dynamicFields = fields.map((item, index) => {
       const getDynamicField = (props: any) => {
@@ -74,7 +108,6 @@ export const useFormDialog = (props: UseFormDialogProps) => {
               <Popover modal={true} onOpenChange={setOpenPopover} open={openPopover}>
                 <PopoverTrigger asChild className='w-full'>
                   <Button variant='secondary' className='w-full rounded-md !flex items-center'>
-                    <CalendarDays className='left-2 h-5 w-5' />
                     <p className='text-center '>
                       {value ? formatVietnameseDate(value) : formatVietnameseDate(new Date())}
                     </p>
@@ -112,13 +145,12 @@ export const useFormDialog = (props: UseFormDialogProps) => {
         />
       )
     })
-
     return (
       <Dialog
-        open={open}
+        open={isOpen}
         onOpenChange={() => {
-          setOpen(false)
-          form.reset({})
+          form.reset()
+          setIsOpen(false)
         }}
       >
         <DialogContent className='max-h-[90%]'>
@@ -130,7 +162,7 @@ export const useFormDialog = (props: UseFormDialogProps) => {
             <form onSubmit={form.handleSubmit(onSubmit)}>
               {dynamicFields}
               <div className='pt-8 flex justify-end gap-2'>
-                <Button disabled={props.loading} className='rounded-radius' type='submit'>
+                <Button disabled={isLoading} className='rounded-radius' type='submit'>
                   Lưu thông tin
                 </Button>
                 <Button
@@ -138,8 +170,8 @@ export const useFormDialog = (props: UseFormDialogProps) => {
                   variant='secondary'
                   type='button'
                   onClick={() => {
-                    setOpen(false)
-                    form.reset({})
+                    setIsOpen(false)
+                    form.reset()
                   }}
                 >
                   Quay lại
@@ -151,5 +183,5 @@ export const useFormDialog = (props: UseFormDialogProps) => {
       </Dialog>
     )
   }
-  return { render }
+  return { render, setValue, create, update }
 }
