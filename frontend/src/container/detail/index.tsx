@@ -2,9 +2,8 @@
 import { Separator } from '@/components/ui/separator'
 import { handleFormatNumber } from '@/utils/format'
 import { useParams } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import List from './components/list'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useFormDialog } from '@/hooks/Form'
 import { useForm } from 'react-hook-form'
@@ -20,6 +19,8 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { ExpenseInput } from '@/types/expense'
 import { useQueryClient } from '@tanstack/react-query'
 import { accountKeys, expenseKeys } from '@/utils/QueryKeyFactory'
+import { Skeleton } from '@/components/ui/skeleton'
+import { refresh } from '@/utils/utils'
 type AccountDetailProps = {}
 const expenseTypeOptions = [
   {
@@ -96,18 +97,15 @@ const AccountDetail: React.FC<AccountDetailProps> = () => {
   const queryClient = useQueryClient()
   const { toast } = useToast()
   const { id } = useParams()
-  const [open, setOpen] = useState<boolean>(false)
-  const [overallType] = useState('all')
-  const { data: account } = useQuery({
+  const { data: account, isLoading: accountLoading } = useQuery({
     queryKey: accountKeys.detail(id as string),
     queryFn: () => accountApi.detail(id as string)
   })
 
-  const { data: expenses } = useQuery({
-    queryKey: expenseKeys.list({}),
+  const { data: expenses, isLoading: expenseLoading } = useQuery({
+    queryKey: expenseKeys.list({ id }),
     queryFn: () => expenseApi.list(id as string)
   })
-
   const form = useForm<z.infer<typeof expenseForm>>({
     resolver: zodResolver(expenseForm),
     defaultValues: {
@@ -119,10 +117,11 @@ const AccountDetail: React.FC<AccountDetailProps> = () => {
       type: 'outcome'
     }
   })
-  const { mutate: createExpense } = useMutation({
+
+  const { mutateAsync: createExpense } = useMutation({
     mutationFn: (input: ExpenseInput) => expenseApi.create(input),
-    onSuccess: (response) => {
-      queryClient.invalidateQueries({ queryKey: expenseKeys.all })
+    onSuccess: async (response) => {
+      await refresh(queryClient, [{ queryKey: expenseKeys.all }, { queryKey: accountKeys.detail(id as string) }])
       toast({
         // @ts-ignore
         title: (
@@ -136,19 +135,28 @@ const AccountDetail: React.FC<AccountDetailProps> = () => {
             <p>Hạng mục: {response.data.category}</p>
             <p className='mt-2'>
               {response.data.type === 'income' ? 'Thu tiền' : 'Chi tiền'}:{' '}
-              {handleFormatNumber(response.data.transaction?.amount!)} VND
+              {handleFormatNumber(response.data.transaction?.amount)} VND
             </p>
           </div>
         )
       })
-      setOpen(false)
-      form.reset({})
     }
   })
-  const onCreateExpense = async (value: z.infer<typeof expenseForm>) => {
-    createExpense({ ...value, account_id: id as string })
-  }
-  const { render: renderForm } = useFormDialog({
+  const { mutateAsync: updateExpense } = useMutation({
+    mutationFn: (input: ExpenseInput) => expenseApi.update(id as string, input),
+    onSuccess: async () => {
+      await refresh(queryClient, [{ queryKey: expenseKeys.all }, { queryKey: accountKeys.detail(id as string) }])
+      toast({
+        title: 'Cập nhật thành công'
+      })
+    }
+  })
+
+  const {
+    render: renderForm,
+    create,
+    update
+  } = useFormDialog({
     fields: [
       {
         name: 'type',
@@ -184,10 +192,10 @@ const AccountDetail: React.FC<AccountDetailProps> = () => {
       }
     ],
     form,
-    onSubmit: onCreateExpense,
-    title: 'Tạo giao dịch',
-    open,
-    setOpen
+
+    createItem: (item: ExpenseInput) => createExpense({ ...item, account_id: id as string }),
+    updateItem: (item: ExpenseInput) => updateExpense(item),
+    title: 'Tạo giao dịch'
   })
 
   useEffect(() => {
@@ -210,50 +218,57 @@ const AccountDetail: React.FC<AccountDetailProps> = () => {
             <p className='hidden lg:block'>Danh sách tài khoản</p>
           </div>
           <h1 className='text-center text-lg font-semibold'>Chi tiết tài khoản</h1>
-          <div>
-            {
-              <>
-                <div className='mt-5 flex justify-between gap-4 '>
-                  <div className='flex-1 break-all hidden sm:block'>
-                    <p className='text-md font-[500] mb-1'> Tài khoản:</p>
-                    <p className='text-sm'>{account?.data?.name}</p>
-                  </div>
-                  <div className='flex-1'>
-                    <p className='text-md font-[500] mb-1'> Số dư ban đầu:</p>
-                    <p className='text-sm'>{handleFormatNumber(account?.data?.initialBalance)} VND</p>
-                  </div>
-                  <div className='flex-1'>
-                    <p className='text-md font-[500] mb-1'> Số dư hiện tại:</p>
-                    <p className='text-sm'>{handleFormatNumber(account?.data?.balance)} VND</p>
-                  </div>
+          {accountLoading ? (
+            <Skeleton className='my-5 h-10' times={1} gap={2} />
+          ) : (
+            <div>
+              <div className='mt-5 flex justify-between gap-4 '>
+                <div className='flex-1 break-all hidden sm:block'>
+                  <p className='text-md font-[500] mb-1'> Tài khoản:</p>
+                  <p className='text-sm'>{account?.data?.name}</p>
                 </div>
-                <Separator className='bg-neutral-300 my-3' />
-                <div className='flex justify-between mb-3 items-center'>
-                  <Button className='w-1/5 flex items-center justify-center gap-3' onClick={() => setOpen(true)}>
-                    <PlusIcon />
-                    <p className='hidden md:block'>Tạo giao dịch mới</p>
-                  </Button>
-                  {/* <div className="flex gap-10">
-                    <Button isActive={overallType === 'all'} onClick={() => setOverallType('all')}>
-                      Tất cả chi tiêu
-                    </Button>
+                <div className='flex-1'>
+                  <p className='text-md font-[500] mb-1'> Số dư ban đầu:</p>
+                  <p className='text-sm'>{handleFormatNumber(account?.data?.initialBalance)} VND</p>
+                </div>
+                <div className='flex-1'>
+                  <p className='text-md font-[500] mb-1'> Số dư hiện tại:</p>
+                  <p className='text-sm'>{handleFormatNumber(account?.data?.balance)} VND</p>
+                </div>
+              </div>
+              <Separator className='bg-neutral-300 my-3' />
+              <div className='flex justify-between mb-3 items-center'>
+                <Button className='w-1/5 flex items-center justify-center gap-3' onClick={() => create()}>
+                  <PlusIcon />
+                  <p className='hidden md:block'>Tạo giao dịch mới</p>
+                </Button>
+                {/* <div className="flex gap-10">
+                   <Button isActive={overallType === 'all'} onClick={() => setOverallType('all')}>
+                     Tất cả chi tiêu
+                   </Button>
 
-                    <Button isActive={overallType === 'month'} onClick={() => setOverallType('month')}>
-                      Tổng hợp theo tháng
-                    </Button>
-                  </div> */}
-                  <Input placeholder='Tìm kiếm khoản chi tiêu theo ngày' className='w-1/3 xl:w-1/5 ' />
-                </div>
-                <h2 className='text-left font-[600] text-lg'>Lịch sử giao dịch</h2>
-                <div className='mt-5'>
-                  {expenses?.data?.list?.length! > 0 ? (
-                    <List overallType={overallType} data={expenses?.data?.list!} paging={expenses?.data?.paging} />
-                  ) : (
-                    <p className='text-3xl text-center mt-20'>Chưa có giao dịch nào</p>
-                  )}
-                </div>
-              </>
-            }
+                   <Button isActive={overallType === 'month'} onClick={() => setOverallType('month')}>
+                     Tổng hợp theo tháng
+                   </Button>
+                 </div> */}
+                {/* <Input placeholder='Tìm kiếm khoản chi tiêu theo ngày' className='w-1/3 xl:w-1/5 ' /> */}
+              </div>
+            </div>
+          )}
+
+          <div>
+            <h2 className='text-left font-[600] text-lg'>Lịch sử giao dịch</h2>
+            {expenseLoading ? (
+              <Skeleton className='mt-5 h-20' times={1} gap={5} />
+            ) : (
+              <div className='mt-5'>
+                {expenses && expenses.data?.list?.length > 0 ? (
+                  <List update={update} data={expenses.data?.list} />
+                ) : (
+                  <p className='text-3xl text-center mt-20'>Chưa có giao dịch nào</p>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

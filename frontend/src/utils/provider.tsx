@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import { useState } from 'react'
+import { ConfirmationDialogContextProvider } from '@/hooks/ConfirmDialog'
 
 export function Provider({ children, session }: { children: React.ReactNode; session?: Session }) {
   const [queryClient] = useState(
@@ -25,9 +26,11 @@ export function Provider({ children, session }: { children: React.ReactNode; ses
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider session={session}>
-        <ThemeProvider>{children}</ThemeProvider>
-        <Toaster />
-        <ReactQueryDevtools buttonPosition='bottom-left' />
+        <ConfirmationDialogContextProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+          <Toaster />
+          <ReactQueryDevtools buttonPosition='bottom-left' />
+        </ConfirmationDialogContextProvider>
       </SessionProvider>
     </QueryClientProvider>
   )

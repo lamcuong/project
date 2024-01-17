@@ -1,6 +1,6 @@
 export interface ExpenseInterface {
   type: string
-  transaction?: {
+  transaction: {
     description: string
     date: Date
     amount: number

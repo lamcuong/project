@@ -25,9 +25,10 @@ export class ExpenseController {
   };
   public update = async (req: Request, res: Response) => {
     try {
-      const { type, category, transaction, account_id, expense_id } = req.body;
+      const { type, category, transaction, id } = req.body;
+      const {account_id} = req.params
       const data = await this.expenseService.update(
-        expense_id,
+        id,
         account_id,
         removeIfNotExist({
           type,
@@ -73,8 +74,7 @@ export class ExpenseController {
   // };
   public delete = async (req: Request, res: Response) => {
     try {
-      const { expense_id } = req.body;
-      const { account_id } = req.params;
+      const { account_id,expense_id } = req.params;
       const data = await this.expenseService.delete(account_id, expense_id);
       return res.success({ data });
     } catch (error) {
