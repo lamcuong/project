@@ -1,0 +1,132 @@
+{
+  "nodes": {
+    "backend-e2e": {
+      "name": "backend-e2e",
+      "type": "e2e",
+      "data": {
+        "root": "backend-e2e",
+        "name": "backend-e2e",
+        "$schema": "../../node_modules/nx/schemas/project-schema.json",
+        "projectType": "application",
+        "implicitDependencies": [
+          "backend"
+        ],
+        "targets": {
+          "e2e": {
+            "executor": "@nx/jest:jest",
+            "outputs": [
+              "{workspaceRoot}/coverage/{e2eProjectRoot}"
+            ],
+            "options": {
+              "jestConfig": "apps/backend-e2e/jest.config.ts",
+              "passWithNoTests": true
+            },
+            "dependsOn": [
+              "backend:build"
+            ],
+            "configurations": {},
+            "parallelism": true
+          }
+        },
+        "tags": []
+      }
+    },
+    "frontend": {
+      "name": "frontend",
+      "type": "app",
+      "data": {
+        "root": "frontend",
+        "name": "frontend",
+        "$schema": "../../node_modules/nx/schemas/project-schema.json",
+        "sourceRoot": "apps/frontend",
+        "projectType": "application",
+        "tags": [],
+        "targets": {},
+        "implicitDependencies": []
+      }
+    },
+    "backend": {
+      "name": "backend",
+      "type": "app",
+      "data": {
+        "root": "backend",
+        "name": "backend",
+        "$schema": "../../node_modules/nx/schemas/project-schema.json",
+        "sourceRoot": "apps/backend/src",
+        "projectType": "application",
+        "tags": [],
+        "targets": {
+          "build": {
+            "executor": "@nx/esbuild:esbuild",
+            "outputs": [
+              "{options.outputPath}"
+            ],
+            "defaultConfiguration": "production",
+            "options": {
+              "platform": "node",
+              "outputPath": "dist/apps/backend",
+              "format": [
+                "cjs"
+              ],
+              "bundle": false,
+              "main": "apps/backend/src/index.ts",
+              "tsConfig": "apps/backend/tsconfig.app.json",
+              "assets": [
+                "apps/backend/src/assets"
+              ],
+              "generatePackageJson": true,
+              "esbuildOptions": {
+                "sourcemap": true,
+                "outExtension": {
+                  ".js": ".js"
+                }
+              }
+            },
+            "configurations": {
+              "development": {},
+              "production": {
+                "esbuildOptions": {
+                  "sourcemap": false,
+                  "outExtension": {
+                    ".js": ".js"
+                  }
+                }
+              }
+            },
+            "parallelism": true
+          },
+          "dev": {
+            "executor": "@nx/js:node",
+            "defaultConfiguration": "development",
+            "options": {
+              "buildTarget": "backend:build"
+            },
+            "configurations": {
+              "development": {
+                "buildTarget": "backend:build:development"
+              },
+              "production": {
+                "buildTarget": "backend:build:production"
+              }
+            },
+            "parallelism": true
+          }
+        },
+        "implicitDependencies": []
+      }
+    }
+  },
+  "externalNodes": {},
+  "dependencies": {
+    "backend-e2e": [
+      {
+        "source": "backend-e2e",
+        "target": "backend",
+        "type": "implicit"
+      }
+    ],
+    "frontend": [],
+    "backend": []
+  },
+  "version": "6.0"
+}

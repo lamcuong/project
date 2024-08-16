@@ -1,0 +1,79 @@
+{
+  "nodes": {
+    "backend": {
+      "name": "backend",
+      "type": "app",
+      "data": {
+        "root": ".",
+        "name": "backend",
+        "$schema": "../../node_modules/nx/schemas/project-schema.json",
+        "sourceRoot": "apps/backend/src",
+        "projectType": "application",
+        "tags": [],
+        "targets": {
+          "build": {
+            "executor": "@nx/esbuild:esbuild",
+            "outputs": [
+              "{options.outputPath}"
+            ],
+            "defaultConfiguration": "production",
+            "options": {
+              "platform": "node",
+              "outputPath": "dist/apps/backend",
+              "format": [
+                "cjs"
+              ],
+              "bundle": false,
+              "main": "apps/backend/src/index.ts",
+              "tsConfig": "apps/backend/tsconfig.app.json",
+              "assets": [
+                "apps/backend/src/assets"
+              ],
+              "generatePackageJson": true,
+              "esbuildOptions": {
+                "sourcemap": true,
+                "outExtension": {
+                  ".js": ".js"
+                }
+              }
+            },
+            "configurations": {
+              "development": {},
+              "production": {
+                "esbuildOptions": {
+                  "sourcemap": false,
+                  "outExtension": {
+                    ".js": ".js"
+                  }
+                }
+              }
+            },
+            "parallelism": true
+          },
+          "dev": {
+            "executor": "@nx/js:node",
+            "defaultConfiguration": "development",
+            "options": {
+              "buildTarget": "backend:build"
+            },
+            "configurations": {
+              "development": {
+                "buildTarget": "backend:build:development"
+              },
+              "production": {
+                "buildTarget": "backend:build:production"
+              }
+            },
+            "parallelism": true
+          }
+        },
+        "implicitDependencies": []
+      }
+    }
+  },
+  "externalNodes": {},
+  "dependencies": {
+    "backend": []
+  },
+  "version": "6.0"
+}

@@ -1,0 +1,36 @@
+services:
+  db:
+    image: mongo:4.0-xenial
+    ports:
+      - 27018:27017 
+    volumes:
+      - mongo:/data/db
+    restart: always
+  backend:
+    build:
+      context: .
+      target: backend
+    container_name: docker-be
+    ports:
+      - 4000:4000
+    env_file:
+      - ./apps/backend/.env
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+      - /app/node_modules
+  frontend:
+    build:
+      context: .
+      target: frontend
+    container_name: docker-fe
+    ports:
+      - 3005:3000
+    depends_on:
+      - backend
+    volumes:
+      - ./:/app
+      - /app/node_modules
+volumes:
+  mongo:
