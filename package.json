@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "dev": "npx nx run-many -t dev"
+    "dev": "npx nx run-many -t dev",
+    "lint": "npx nx run-many -t lint",
+    "nx:graph": "nx graph",
+    "build": "nx run-many -t build"
   },
   "private": true,
   "dependencies": {

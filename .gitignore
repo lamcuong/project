@@ -4,7 +4,6 @@
 dist
 tmp
 /out-tsc
-
 # dependencies
 node_modules
 
@@ -44,3 +43,6 @@ Thumbs.db
 # Next.js
 .next
 out
+
+**/*.env
+!.env.example
