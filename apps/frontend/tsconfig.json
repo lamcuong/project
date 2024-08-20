@@ -16,10 +16,11 @@
         "name": "next"
       }
     ],
-    "types": [
-      "jest",
-      "node"
-    ]
+    "types": ["jest", "node"],
+    "paths": {
+      "@expense-management/shared": ["libs/shared/src/index.ts"],
+      "@expense-management/frontend/*": ["apps/frontend/src/*"]
+    }
   },
   "include": [
     "**/*.ts",
