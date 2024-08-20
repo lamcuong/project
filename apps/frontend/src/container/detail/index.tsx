@@ -1,26 +1,29 @@
 'use client'
-import { Separator } from '@frontend/components/ui/separator'
-import { handleFormatNumber } from '@frontend/utils/format'
+import { Separator } from '@expense-management/frontend/components/ui/separator';
+import { handleFormatNumber } from '@expense-management/frontend/utils/format';
 import { useParams } from 'next/navigation'
 import React, { useEffect } from 'react'
 import List from './components/list'
-import { Button } from '@frontend/components/ui/button'
-import { useFormDialog } from '@frontend/hooks/Form'
+import { Button } from '@expense-management/frontend/components/ui/button';
+import { useFormDialog } from '@expense-management/frontend/hooks/Form';
 import { useForm } from 'react-hook-form'
-import { expenseForm } from '@frontend/components/shared/forms'
+import { expenseForm } from '@expense-management/frontend/components/shared/forms';
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useToast } from '@frontend/components/ui/use-toast'
+import { useToast } from '@expense-management/frontend/components/ui/use-toast';
 import { MoveLeft, PlusIcon } from 'lucide-react'
 import Link from 'next/link'
-import { accountApi } from '@frontend/app/api/account'
-import { expenseApi } from '@frontend/app/api/expense'
+import { accountApi } from '@expense-management/frontend/app/api/account';
+import { expenseApi } from '@expense-management/frontend/app/api/expense';
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { ExpenseInput } from '@frontend/types/expense'
+import { ExpenseInput } from '@expense-management/frontend/types/expense';
 import { useQueryClient } from '@tanstack/react-query'
-import { accountKeys, expenseKeys } from '@frontend/utils/QueryKeyFactory'
-import { Skeleton } from '@frontend/components/ui/skeleton'
-import { refresh } from '@frontend/utils/utils'
+import {
+  accountKeys,
+  expenseKeys,
+} from '@expense-management/frontend/utils/QueryKeyFactory';
+import { Skeleton } from '@expense-management/frontend/components/ui/skeleton';
+import { refresh } from '@expense-management/frontend/utils/utils';
 type AccountDetailProps = {}
 const expenseTypeOptions = [
   {

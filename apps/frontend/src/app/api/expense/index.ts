@@ -1,6 +1,10 @@
 import { handleRequest } from '../handle'
 import { apiExpense } from '../config'
-import { ExpenseListResponse, ExpenseInput, ExpenseResponse } from '@frontend/types/expense'
+import {
+  ExpenseListResponse,
+  ExpenseInput,
+  ExpenseResponse,
+} from '@expense-management/frontend/types/expense';
 
 const list = (id: string) => {
   return handleRequest<BaseResponse<ExpenseListResponse>>(`${apiExpense}/list/${id}`, {

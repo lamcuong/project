@@ -3,8 +3,8 @@ import * as LabelPrimitive from '@radix-ui/react-label'
 import { Slot } from '@radix-ui/react-slot'
 import { Controller, ControllerProps, FieldPath, FieldValues, FormProvider, useFormContext } from 'react-hook-form'
 
-import { Label } from '@frontend/components/ui/label'
-import { cn } from '@frontend/lib/utils'
+import { Label } from '@expense-management/frontend/components/ui/label';
+import { cn } from '@expense-management/frontend/lib/utils';
 
 const Form = FormProvider
 

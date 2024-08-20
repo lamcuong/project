@@ -1,14 +1,19 @@
-import AccountModel from '@backend/mongo/schemas/account';
-import ExpenseModel from '@backend/mongo/schemas/expense';
+import AccountModel from '@expense-management/backend/mongo/schemas/account';
+import ExpenseModel from '@expense-management/backend/mongo/schemas/expense';
 import { injectable } from 'inversify';
 import mongoose from 'mongoose';
 
 @injectable()
 export class ExpenseService {
   public create = async (input: ExpenseInput) => {
-    const expense = await (await ExpenseModel.create(input)).populate('account');
+    const expense = await (
+      await ExpenseModel.create(input)
+    ).populate('account');
     if (!expense) throw new Error('Create expense failed');
-    const amount = expense.type === 'income' ? expense.transaction?.amount : -expense.transaction?.amount!;
+    const amount =
+      expense.type === 'income'
+        ? expense.transaction?.amount
+        : -expense.transaction?.amount!;
     await AccountModel.findOneAndUpdate(
       { _id: expense.account.id, user: expense.account.user },
       {
@@ -16,16 +21,26 @@ export class ExpenseService {
           balance: amount,
         },
       },
-      { new: true }
+      { new: true },
     );
     return expense.toObject();
   };
-  public update = async (expense_id: ExpenseCore.ID, account_id: ExpenseCore.ID, input: ExpenseInput) => {
+  public update = async (
+    expense_id: ExpenseCore.ID,
+    account_id: ExpenseCore.ID,
+    input: ExpenseInput,
+  ) => {
     const expense = await (
-      await ExpenseModel.findOneAndUpdate({ _id: expense_id, account: account_id }, {$set:input})
+      await ExpenseModel.findOneAndUpdate(
+        { _id: expense_id, account: account_id },
+        { $set: input },
+      )
     )?.populate('account');
     if (!expense) throw new Error('Not found');
-    if (input.transaction?.amount !== expense.transaction?.amount || input.type !== expense.type) {
+    if (
+      input.transaction?.amount !== expense.transaction?.amount ||
+      input.type !== expense.type
+    ) {
       // const newBalance = await ExpenseModel.aggregate([
       //   {
       //     $match: {
@@ -53,7 +68,11 @@ export class ExpenseService {
     }
     return expense?.toObject();
   };
-  public list = async (account_id: ExpenseCore.ID, limit: number, page: number) => {
+  public list = async (
+    account_id: ExpenseCore.ID,
+    limit: number,
+    page: number,
+  ) => {
     const skip = (page - 1) * limit;
     const list = await ExpenseModel.aggregate([
       {
@@ -81,7 +100,7 @@ export class ExpenseService {
       },
       {
         $facet: {
-          data: [{$skip: skip},{ $limit: limit }],
+          data: [{ $skip: skip }, { $limit: limit }],
           total: [{ $count: 'count' }],
         },
       },
@@ -97,20 +116,32 @@ export class ExpenseService {
       },
     };
   };
-  public delete = async (account_id: ExpenseCore.ID, expense_id: ExpenseCore.ID) => {
-    const expense = await ExpenseModel.findOneAndDelete({ account: account_id, _id: expense_id },{});
+  public delete = async (
+    account_id: ExpenseCore.ID,
+    expense_id: ExpenseCore.ID,
+  ) => {
+    const expense = await ExpenseModel.findOneAndDelete(
+      { account: account_id, _id: expense_id },
+      {},
+    );
     if (!expense) throw new Error('Expense not found');
     await AccountModel.findOneAndUpdate(
       { _id: account_id },
       {
         $inc: {
-          balance: expense.type === 'income' ? -expense.transaction?.amount! : expense.transaction?.amount,
+          balance:
+            expense.type === 'income'
+              ? -expense.transaction?.amount!
+              : expense.transaction?.amount,
         },
-      }
+      },
     );
     return expense.toObject();
   };
-  public monthDetail = async (account_id: ExpenseCore.ID, month?: number | string) => {
+  public monthDetail = async (
+    account_id: ExpenseCore.ID,
+    month?: number | string,
+  ) => {
     // const skip = limit * (page - 1);
     // const list = await ExpenseModel.aggregate([
     //   {

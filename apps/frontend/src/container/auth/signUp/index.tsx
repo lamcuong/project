@@ -3,18 +3,30 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@frontend/components/ui/form'
-import { Button } from '@frontend/components/ui/button'
-import { Input } from '@frontend/components/ui/input'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@expense-management/frontend/components/ui/form';
+import { Button } from '@expense-management/frontend/components/ui/button';
+import { Input } from '@expense-management/frontend/components/ui/input';
 import { ShowPassword } from '../assets/eye'
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@frontend/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from '@expense-management/frontend/components/ui/dialog';
 import SuccessIcon from '../assets/success'
 import ArrowDown from '../assets/ArrowDown'
-import { signUpForm } from '@frontend/components/shared/forms'
+import { signUpForm } from '@expense-management/frontend/components/shared/forms';
 import { RotateCw } from 'lucide-react'
-import { userApi } from '@frontend/app/api/user'
+import { userApi } from '@expense-management/frontend/app/api/user';
 import { useMutation } from '@tanstack/react-query'
-import { UserInterface } from '@frontend/types/user'
+import { UserInterface } from '@expense-management/frontend/types/user';
 type SignUpProps = {}
 
 const SignUp: React.FC<SignUpProps> = () => {

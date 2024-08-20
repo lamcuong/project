@@ -1,13 +1,13 @@
-import AccountDetail from "@frontend/container/detail"
+import AccountDetail from '@expense-management/frontend/container/detail';
 
-type DetailProps = {}
+type DetailProps = {};
 
 const Detail: React.FC<DetailProps> = () => {
   return (
     <>
       <AccountDetail />
     </>
-  )
-}
+  );
+};
 
-export default Detail
+export default Detail;
