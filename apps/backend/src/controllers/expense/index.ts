@@ -1,5 +1,5 @@
-import { ExpenseService } from '@backend/services/expense';
-import { removeIfNotExist } from '@backend/utils/lodash';
+import { ExpenseService } from '@expense-management/backend/services/expense';
+import { removeIfNotExist } from '@expense-management/backend/utils/lodash';
 import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 
@@ -26,7 +26,7 @@ export class ExpenseController {
   public update = async (req: Request, res: Response) => {
     try {
       const { type, category, transaction, id } = req.body;
-      const {account_id} = req.params
+      const { account_id } = req.params;
       const data = await this.expenseService.update(
         id,
         account_id,
@@ -34,7 +34,7 @@ export class ExpenseController {
           type,
           category,
           transaction,
-        })
+        }),
       );
       return res.success({ data });
     } catch (error) {
@@ -46,7 +46,11 @@ export class ExpenseController {
     try {
       const { limit = 10, page = 1 } = req.query;
       const { account_id } = req.params;
-      const data = await this.expenseService.list(account_id, Number(limit), Number(page));
+      const data = await this.expenseService.list(
+        account_id,
+        Number(limit),
+        Number(page),
+      );
       console.log(data);
 
       return res.success({ data });
@@ -74,7 +78,7 @@ export class ExpenseController {
   // };
   public delete = async (req: Request, res: Response) => {
     try {
-      const { account_id,expense_id } = req.params;
+      const { account_id, expense_id } = req.params;
       const data = await this.expenseService.delete(account_id, expense_id);
       return res.success({ data });
     } catch (error) {

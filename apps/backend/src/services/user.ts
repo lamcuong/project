@@ -1,7 +1,7 @@
 import { id, injectable } from 'inversify';
 import bcrypt, { genSalt } from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import UserModel from '@backend/mongo/schemas/user';
+import UserModel from '@expense-management/backend/mongo/schemas/user';
 @injectable()
 export class UserService {
   private bcryptPassword = async (password: string) => {

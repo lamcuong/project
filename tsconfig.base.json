@@ -16,8 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@expense-management/shared": ["libs/shared/src/index.ts"],
-      "@frontend/*":["apps/frontend/src/*"],
-      "@backend/*":["apps/backend/src/*"]
+      "@expense-management/frontend/*": ["apps/frontend/src/*"],
+      "@expense-management/backend/*": ["apps/backend/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

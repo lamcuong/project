@@ -1,4 +1,4 @@
-import UserModel from '@backend/mongo/schemas/user';
+import UserModel from '@expense-management/backend/mongo/schemas/user';
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 export const auth = async (req: Request, res: Response, next: NextFunction) => {

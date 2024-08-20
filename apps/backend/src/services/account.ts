@@ -1,7 +1,7 @@
 import {  injectable } from 'inversify';
 import AccountModel from '../mongo/schemas/account';
 import mongoose, { mongo } from 'mongoose';
-import ExpenseModel from '@backend/mongo/schemas/expense';
+import ExpenseModel from '@expense-management/backend/mongo/schemas/expense';
   @injectable()
 export class AccountService {
   regex = (pattern: string) => new RegExp(`.*${pattern}.*`);

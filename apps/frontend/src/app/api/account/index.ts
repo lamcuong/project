@@ -1,6 +1,10 @@
 import { handleRequest } from '../handle'
 import { apiAccount } from '../config'
-import { AccountInput, AccountResponse, AccountListResponse } from '@frontend/types/account'
+import {
+  AccountInput,
+  AccountResponse,
+  AccountListResponse,
+} from '@expense-management/frontend/types/account';
 
 const create = (input: AccountInput) => {
   return handleRequest<AccountResponse>(`${apiAccount}/create`, {
