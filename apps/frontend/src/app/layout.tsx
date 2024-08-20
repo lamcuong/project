@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Provider } from '../utils/provider'
 import NextTopLoader from 'nextjs-toploader'
 import { Inter } from 'next/font/google'
-import { cn } from '@frontend/lib/utils'
+import { cn } from '@expense-management/frontend/lib/utils';
 
 const inter = Inter({
   subsets: ['latin'],

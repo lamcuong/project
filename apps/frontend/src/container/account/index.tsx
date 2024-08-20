@@ -3,22 +3,32 @@ import * as z from 'zod'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { TableHeader, TableRow, TableHead, TableBody, TableCell, Table } from '@frontend/components/ui/table'
-import Pagination from '@frontend/components/ui/pagination'
-import { Button } from '@frontend/components/ui/button'
-import { Separator } from '@frontend/components/ui/separator'
+import {
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+  Table,
+} from '@expense-management/frontend/components/ui/table';
+import Pagination from '@expense-management/frontend/components/ui/pagination';
+import { Button } from '@expense-management/frontend/components/ui/button';
+import { Separator } from '@expense-management/frontend/components/ui/separator';
 import EmptyState from './components/emptyState'
 import Link from 'next/link'
-import { accountApi } from '@frontend/app/api/account'
-import { AccountInput, AccountInterface } from '@frontend/types/account'
+import { accountApi } from '@expense-management/frontend/app/api/account';
+import {
+  AccountInput,
+  AccountInterface,
+} from '@expense-management/frontend/types/account';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { accountKeys } from '@frontend/utils/QueryKeyFactory'
-import { refresh } from '@frontend/utils/utils'
-import { useConfirmDialog } from '@frontend/hooks/ConfirmDialog'
-import { accountForm } from '@frontend/components/shared/forms'
-import { useFormDialog } from '@frontend/hooks/Form'
-import { toast } from '@frontend/components/ui/use-toast'
-import { Skeleton } from '@frontend/components/ui/skeleton'
+import { accountKeys } from '@expense-management/frontend/utils/QueryKeyFactory';
+import { refresh } from '@expense-management/frontend/utils/utils';
+import { useConfirmDialog } from '@expense-management/frontend/hooks/ConfirmDialog';
+import { accountForm } from '@expense-management/frontend/components/shared/forms';
+import { useFormDialog } from '@expense-management/frontend/hooks/Form';
+import { toast } from '@expense-management/frontend/components/ui/use-toast';
+import { Skeleton } from '@expense-management/frontend/components/ui/skeleton';
 type AccountProps = {}
 
 const Account: React.FC<AccountProps> = () => {

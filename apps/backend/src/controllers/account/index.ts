@@ -1,5 +1,5 @@
-import { AccountService } from '@backend/services/account';
-import { removeIfNotExist } from '@backend/utils/lodash';
+import { AccountService } from '@expense-management/backend/services/account';
+import { removeIfNotExist } from '@expense-management/backend/utils/lodash';
 import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 
@@ -17,7 +17,7 @@ export class AccountController {
           initialBalance,
           user: req.user.id,
           balance: initialBalance,
-        })
+        }),
       );
       return res.success({ data });
     } catch (error) {
@@ -34,7 +34,7 @@ export class AccountController {
           name,
           initialBalance,
           user: req.user.id,
-        })
+        }),
       );
 
       return res.success({ data });
@@ -62,9 +62,14 @@ export class AccountController {
   };
   public list = async (req: Request, res: Response) => {
     try {
-      const { limit = 10, page = 1, search = "" } = req.query;
+      const { limit = 10, page = 1, search = '' } = req.query;
       console.log(limit);
-      const data = await this.accountService.list(req.user?.id!, Number(limit), Number(page), search as string);
+      const data = await this.accountService.list(
+        req.user?.id!,
+        Number(limit),
+        Number(page),
+        search as string,
+      );
       return res.success({ data });
     } catch (error) {
       console.log(error);

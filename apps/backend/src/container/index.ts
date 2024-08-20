@@ -8,9 +8,9 @@ import { UserController } from '../controllers/user';
 import { UserService } from '../services/user';
 // import { AccountController } from '../controllers/account/account';
 import { AccountService } from '../services/account';
-import { ExpenseService } from '@backend/services/expense';
-import { AccountController } from '@backend/controllers/account';
-import { ExpenseController } from '@backend/controllers/expense';
+import { ExpenseService } from '@expense-management/backend/services/expense';
+import { AccountController } from '@expense-management/backend/controllers/account';
+import { ExpenseController } from '@expense-management/backend/controllers/expense';
 
 const controllerContainer = new Container();
 

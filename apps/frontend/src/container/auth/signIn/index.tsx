@@ -3,19 +3,26 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@frontend/components/ui/form'
-import { Button } from '@frontend/components/ui/button'
-import { Input } from '@frontend/components/ui/input'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@expense-management/frontend/components/ui/form';
+import { Button } from '@expense-management/frontend/components/ui/button';
+import { Input } from '@expense-management/frontend/components/ui/input';
 import { ShowPassword } from '../assets/eye'
-// import { useSignInMutation } from '@frontend/store/apis/authApi'
+// import { useSignInMutation } from '@expense-management/frontend/store/apis/authApi'
 import { setCookie } from 'cookies-next'
 import { RotateCw } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { signInForm } from '@frontend/components/shared/forms'
-import { CardHeader } from '@frontend/components/ui/card'
-import { userApi } from '@frontend/app/api/user/index'
+import { signInForm } from '@expense-management/frontend/components/shared/forms';
+import { CardHeader } from '@expense-management/frontend/components/ui/card';
+import { userApi } from '@expense-management/frontend/app/api/user/index';
 import { useMutation } from '@tanstack/react-query'
-import { UserInterface } from '@frontend/types/user'
+import { UserInterface } from '@expense-management/frontend/types/user';
 type SignInProps = {}
 
 const SignIn: React.FC<SignInProps> = () => {
