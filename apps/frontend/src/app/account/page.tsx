@@ -1,15 +1,15 @@
-import Account from '@frontend/container/account'
-import MainLayout from '@frontend/layouts'
-import React from 'react'
+import Account from '@expense-management/frontend/container/account';
+import MainLayout from '@expense-management/frontend/layouts';
+import React from 'react';
 
-type AccountsProps = {}
+type AccountsProps = {};
 
 const Accounts: React.FC<AccountsProps> = () => {
   return (
     <MainLayout>
       <Account />
     </MainLayout>
-  )
-}
+  );
+};
 
-export default Accounts
+export default Accounts;

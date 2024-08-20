@@ -1,6 +1,6 @@
 'use client'
 
-import { AccountInterface } from '@frontend/types/account'
+import { AccountInterface } from '@expense-management/frontend/types/account';
 import { ColumnDef } from '@tanstack/react-table'
 
 export const columns: ColumnDef<AccountInterface>[] = [

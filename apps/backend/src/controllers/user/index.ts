@@ -1,8 +1,8 @@
 import { inject, injectable } from "inversify";
 import { Request, Response } from "express";
-import UserModel from "@backend/mongo/schemas/user";
-import { UserService } from "@backend/services/user";
-import { removeIfNotExist } from "@backend/utils/lodash";
+import UserModel from '@expense-management/backend/mongo/schemas/user';
+import { UserService } from '@expense-management/backend/services/user';
+import { removeIfNotExist } from '@expense-management/backend/utils/lodash';
 @injectable()
 export class UserController {
   @inject(UserService)

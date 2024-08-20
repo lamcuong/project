@@ -1,6 +1,6 @@
-import container from '@backend/container';
-import { AccountController } from '@backend/controllers/account';
-import { auth } from '@backend/middleware/auth';
+import container from '@expense-management/backend/container';
+import { AccountController } from '@expense-management/backend/controllers/account';
+import { auth } from '@expense-management/backend/middleware/auth';
 import express from 'express';
 
 const route = express();

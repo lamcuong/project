@@ -10,7 +10,7 @@
     "cssVariables": true
   },
   "aliases": {
-    "components": "@frontend/components",
-    "utils": "@frontend/lib/utils"
+    "components": "@expense-management/frontend/components",
+    "utils": "@expense-management/frontend/lib/utils"
   }
 }

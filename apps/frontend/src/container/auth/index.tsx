@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import SignIn from './signIn'
 import SignUp from './signUp'
-import { Card } from '@frontend/components/ui/card'
+import { Card } from '@expense-management/frontend/components/ui/card';
 
 type AuthPageProps = {}
 

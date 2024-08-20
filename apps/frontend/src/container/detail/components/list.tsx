@@ -3,7 +3,7 @@ import moment from 'moment'
 import React, { useMemo } from 'react'
 import Item from './item'
 import _ from 'lodash'
-import { ExpenseInterface } from '@frontend/types/expense'
+import { ExpenseInterface } from '@expense-management/frontend/types/expense';
 
 type ListProps = {
   data: ExpenseInterface[]
