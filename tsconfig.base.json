@@ -15,9 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@expense-management/shared": ["libs/shared/src/index.ts"],
-      "@frontend/*":["apps/frontend/src/*"],
-      "@backend/*":["apps/backend/src/*"]
+      "@expense-management/shared": ["libs/shared/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
