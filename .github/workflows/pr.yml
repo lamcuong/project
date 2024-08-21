@@ -2,7 +2,7 @@ name: Check Pull Request
 on:
   push:
     branches:
-      - development
+      - develop
 jobs:
   setup:
    runs-on: ubuntu-latest
