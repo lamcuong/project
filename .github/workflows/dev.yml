@@ -55,6 +55,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: List all files
+        run: ls -a
+        
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
