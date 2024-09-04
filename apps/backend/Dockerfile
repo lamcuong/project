@@ -6,7 +6,7 @@ WORKDIR /app
 RUN addgroup --system backend && \
           adduser --system -G backend backend
 # COPY dist/apps/backend .
-RUN npm install --production
+# RUN npm install --production
 RUN cat Dockerfile & ls /trhrth
 RUN ls -a && ls /erre
 
