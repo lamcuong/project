@@ -69,7 +69,7 @@ jobs:
         with:
           path: |
             **/node_modules
-            ${{ github.workspace }}/.next/cache
+            **/.next/cache
           key: ${{ runner.os }}-node-20-cache-${{ hashFiles('**/package-lock.json') }}
           restore-keys: ${{ runner.os }}-node-20-cache-
 
