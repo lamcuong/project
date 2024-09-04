@@ -1,12 +1,12 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc",
+    "outDir": "../../dist/apps/backend",
     "module": "commonjs",
     "types": ["node"],
     "paths": {
       "@expense-management/backend/*": ["apps/backend/src/*"],
-      "@expense-management/shared/*": ["libs/shared/src/index.ts"]
+      "@expense-management/shared": ["libs/shared/src/index.ts"]
     }
   },
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],

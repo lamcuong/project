@@ -2,6 +2,7 @@ import mongoose, { SchemaTypes } from 'mongoose';
 import collections from '../collections';
 import { defaultPlugin } from '../plugins/defaultPlugin';
 import ExpenseModel from './expense';
+import { ExpenseType } from '@expense-management/shared';
 const schema = new mongoose.Schema<ExpenseCore.Account>(
   {
     name: {
@@ -34,7 +35,11 @@ schema.methods.getNewBalance = async function () {
         _id: null,
         newBalance: {
           $sum: {
-            $cond: [{ $eq: ['$type', 'income'] }, '$transaction.amount', { $subtract: [0, '$transaction.amount'] }],
+            $cond: [
+              { $eq: ['$type', ExpenseType.Income] },
+              '$transaction.amount',
+              { $subtract: [0, '$transaction.amount'] },
+            ],
           },
         },
       },

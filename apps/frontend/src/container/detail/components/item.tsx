@@ -5,7 +5,7 @@ import {
 } from '@expense-management/frontend/components/ui/collapsible';
 import { ChevronDown, Pencil, Trash } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
-import '../../../../styles/collapsible.css';
+import '@expense-management/frontend/styles/collapsible.css';
 import { handleFormatNumber } from '@expense-management/frontend/utils/format';
 import { Separator } from '@expense-management/frontend/components/ui/separator';
 import { cn } from '@expense-management/frontend/lib/utils';
@@ -26,6 +26,7 @@ import {
   expenseKeys,
 } from '@expense-management/frontend/utils/QueryKeyFactory';
 import { useConfirmDialog } from '@expense-management/frontend/hooks/ConfirmDialog';
+import { ExpenseType } from '@expense-management/shared';
 type ItemProps = {
   date: string;
   groupedList: any;
@@ -48,7 +49,7 @@ const Item: React.FC<ItemProps> = ({
     return groupedByDate[date].reduce(
       (currentAmount: number, item: ExpenseInterface) => {
         const amount =
-          item.type === 'income'
+          item.type === ExpenseType.Income
             ? item.transaction?.amount
             : -item.transaction?.amount;
         return currentAmount + amount!;
@@ -126,7 +127,7 @@ const Item: React.FC<ItemProps> = ({
               const categoryAmount = groupedList[date][category].reduce(
                 (initialValue: number, item: ExpenseInterface) => {
                   const amount =
-                    item.type === 'income'
+                    item.type === ExpenseType.Income
                       ? item.transaction?.amount
                       : -item.transaction?.amount;
                   return initialValue + Number(amount);
@@ -153,7 +154,7 @@ const Item: React.FC<ItemProps> = ({
                   {groupedList[date][category].map(
                     (item: ExpenseInterface, index: number, array: any) => {
                       const amount =
-                        item.type === 'income'
+                        item.type === ExpenseType.Income
                           ? item.transaction?.amount
                           : -item?.transaction?.amount;
                       return (

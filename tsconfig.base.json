@@ -10,13 +10,15 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2020", "dom","ES2021.String"],
+    "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@expense-management/shared": ["libs/shared/src/index.ts"]
-    }
+      "@expense-management/shared": ["libs/shared/src/index.ts"],
+      "@expense-management/frontend/*": ["apps/frontend/src/*"]
+    },
+    "typeRoots": ["./node_modules/@types"]
   },
   "exclude": ["node_modules", "tmp"]
 }
