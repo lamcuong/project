@@ -31,27 +31,17 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # - name: Lint
-      #   run: npx nx affected --target=lint --parallel=3
+      - name: Lint
+        run: npx nx affected --target=lint --parallel=3
 
-      # - name: Test
-      #   run: npx nx affected --target=test -- parallel=3
-    
-      - name: Get affected apps
-        id: get_affected
-        # run: |
-        #   affected=$(npx nx show projects --affected)
-        #   echo "affected=$affected" >> $GITHUB_ENV
-        run: |
-          affected=$(npx nx show projects --affected --json || echo "[]")
-          echo "affected=${affected}" >> $GITHUB_OUTPUT
-          echo "Affected apps: ${affected}"
+      - name: Test
+        run: npx nx affected --target=test -- parallel=3
   docker:
     runs-on: ubuntu-latest
     needs: ci
     strategy:
       matrix:
-        app: ${{ fromJson(needs.ci.outputs.affected) }}
+        app: [backend, frontend]
     steps:
       - name: Checkout code 
         uses: actions/checkout@v4
