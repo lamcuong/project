@@ -42,7 +42,7 @@ jobs:
         #   echo "affected=$affected" >> $GITHUB_ENV
         run: |
           affected=$(npx nx show projects --affected --json || echo "[]")
-          echo "AFFECTED_APPS=${affected}" >> $GITHUB_ENV
+          echo "AFFECTED_APPS=${affected}" >> $GITHUB_OUTPUT
           echo "Affected apps: ${affected}"
   docker:
     runs-on: ubuntu-latest
