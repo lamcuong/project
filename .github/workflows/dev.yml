@@ -42,14 +42,14 @@ jobs:
         #   echo "affected=$affected" >> $GITHUB_ENV
         run: |
           affected=$(npx nx show projects --affected --json || echo "[]")
-          echo "AFFECTED_APPS=${affected}" >> $GITHUB_OUTPUT
+          echo "AFFECTED_APPS=${affected}" >> $GITHUB_ENV
           echo "Affected apps: ${affected}"
   docker:
     runs-on: ubuntu-latest
     needs: ci
     strategy:
       matrix:
-        app: ${{ fromJson(needs.ci.outputs.affected) }}
+        app: ${{ fromJson(env.AFFECTED_APPS) }}
     steps:
       - name: Checkout code 
         uses: actions/checkout@v4
