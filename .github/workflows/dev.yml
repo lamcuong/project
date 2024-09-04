@@ -49,7 +49,7 @@ jobs:
     needs: ci
     strategy:
       matrix:
-        app: ${{ fromJson(env.AFFECTED_APPS) }}
+        app: ${{ fromJson(needs.ci.outputs.AFFECTED_APPS) }}
     steps:
       - name: Checkout code 
         uses: actions/checkout@v4
