@@ -56,8 +56,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: List all files
-        run: ls -a
-        
+        run: ls -a && ls apps & apps/backend
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
