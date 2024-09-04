@@ -20,7 +20,9 @@ jobs:
       - name: Cache node modules
         uses: actions/cache@v4
         with:
-          path: '**/node_modules'
+          path: |
+            **/node_modules
+            ${{ github.workspace }}/.next/cache
           key: ${{ runner.os }}-node-20-cache-${{ hashFiles('**/package-lock.json') }}
 
           restore-keys: ${{ runner.os }}-node-20-cache-
@@ -65,7 +67,9 @@ jobs:
       - name: Cache node modules
         uses: actions/cache@v4
         with:
-          path: '**/node_modules'
+          path: |
+            **/node_modules
+            ${{ github.workspace }}/.next/cache
           key: ${{ runner.os }}-node-20-cache-${{ hashFiles('**/package-lock.json') }}
           restore-keys: ${{ runner.os }}-node-20-cache-
 
