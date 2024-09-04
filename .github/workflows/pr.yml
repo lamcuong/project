@@ -76,8 +76,5 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Setup env frontend
-        run: mv apps/frontend/.env apps/frontend/.env
-
       - name: Build project
         run: npx nx run frontend:build
