@@ -98,7 +98,7 @@ jobs:
       - name: Deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{env.SSH_SERVER_IP}}
+          host: ${{secrets.SSH_SERVER_IP}}
           username: ${{env.SSH_USER}}
           key: ${{secrets.SSH_PRIVATE_KEY}}
           script: |
