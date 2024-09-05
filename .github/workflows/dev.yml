@@ -84,3 +84,26 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/${{ matrix.app }}-dev:latest
           cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/${{ matrix.app }}-dev:buildcache
           cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/${{ matrix.app }}-dev:buildcache,mode=max
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
+      - name: Deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{secrets.SSH_SERVER_IP}}
+          username: ${{env.SSH_USER}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          script: |
+            docker pull ghcr.io/${{github.repository_owner}}/frontend-dev:latest
+            docker pull ghcr.io/${{github.repository_owner}}/backend-dev:latest
+            cd ${{env.PATH_TO_PROJECT}}
+            docker compose down
+            docker compose up -d
+            docker image prune -f 
