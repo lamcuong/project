@@ -59,8 +59,9 @@ jobs:
         run: npm install
 
       - name: Setup env frontend
+        if: matrix.app == 'frontend'
         run: echo "${{secrets.DEV_FE}}" > apps/frontend/.env
-        
+
       - name: Build projects
         run: npx nx run ${{matrix.app}}:build
 
