@@ -99,12 +99,12 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_SERVER_IP }}
-          username: ${{env.SSH_USER}}
-          key: ${{secrets.SSH_PRIVATE_KEY}}
+          username: ${{ env.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             docker pull ghcr.io/${{github.repository_owner}}/frontend-dev:latest
             docker pull ghcr.io/${{github.repository_owner}}/backend-dev:latest
-            cd ${{env.PATH_TO_PROJECT}}
+            cd ${{ env.PATH_TO_PROJECT }}
             docker compose down
             docker compose up -d
             docker image prune -f
