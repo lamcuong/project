@@ -95,8 +95,8 @@ jobs:
           registry: ghcr.io
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
-      - run: echo "${{env.SSH_USER}}"
-      - run: echo "${{env.PATH_TO_PROJECT}}"
+      - run: echo "${{vars.SSH_USER}}"
+      - run: echo "${{vars.PATH_TO_PROJECT}}"
       # - name: Deploy
       #   uses: appleboy/ssh-action@v1.0.3
       #   with:
