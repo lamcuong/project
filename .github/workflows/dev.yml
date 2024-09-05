@@ -6,8 +6,6 @@ on:
 jobs:
   setup:
     runs-on: ubuntu-latest
-    outputs:
-      affected: ${{ steps.set-affected.outputs.affected }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -82,7 +80,7 @@ jobs:
           file: apps/${{ matrix.app }}/Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ matrix.app }}:${{ github.sha }}
-            ghcr.io/${{ github.repository_owner }}/${{ matrix.app }}:latest
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/${{ matrix.app }}:buildcache
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/${{ matrix.app }}:buildcache,mode=max
+            ghcr.io/${{ github.repository_owner }}/${{ matrix.app }}-dev:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/${{ matrix.app }}-dev:latest
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/${{ matrix.app }}-dev:buildcache
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/${{ matrix.app }}-dev:buildcache,mode=max
