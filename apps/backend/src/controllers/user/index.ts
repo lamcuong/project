@@ -35,7 +35,7 @@ export class UserController {
         })
       );
       if (!data) {
-        return res.unauth({ message: 'Username or pas123sword is wrong' });
+        return res.unauth({ message: 'Username or 123password is wrong' });
       }
       // @ts-ignore
       return res.success({ data });
