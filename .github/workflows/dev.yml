@@ -102,6 +102,7 @@ jobs:
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            echo "${{secrets.GITHUB_TOKEN}}" | docker login ghcr.io -u ${{github.actor}} --password-stdin
             docker pull ghcr.io/${{github.repository_owner}}/frontend-dev:latest
             docker pull ghcr.io/${{github.repository_owner}}/backend-dev:latest
             cd ${{ vars.PATH_TO_PROJECT }}
