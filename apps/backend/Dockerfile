@@ -1,5 +1,5 @@
 
-FROM --platform=linux/arm64 node:20-alpine AS deps
+FROM node:20-alpine AS deps
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ COPY libs ./libs
 RUN npx nx run backend:build --verbose
 RUN npm install --production
 
-FROM --platform=linux/arm64 node:20-alpine AS runner
+FROM node:20-alpine AS runner
 
 WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules

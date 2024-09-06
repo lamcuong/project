@@ -12,7 +12,7 @@
 # RUN chown -R frontend:frontend .
 # USER frontend
 # CMD [ "node" ,"server.js" ]
-FROM --platform=linux/arm64 node:20-alpine AS base
+FROM node:20-alpine AS base
 
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
