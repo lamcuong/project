@@ -2,7 +2,9 @@ name: Check Pull Request
 on:
   push:
     branches:
-      - feat/implement-ci
+      - 'develop'
+      - 'main'
+  pull_request:
 jobs:
   setup:
     runs-on: ubuntu-latest
@@ -12,7 +14,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: set up Nodejs v20
+      - name: Set up Nodejs v20
         uses: actions/setup-node@v4
         with:
           node-version: '20'
