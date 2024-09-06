@@ -16,7 +16,7 @@ const AuthPage: React.FC<AuthPageProps> = () => {
       <br />
       {page === 'signIn' ? (
         <p className="text-center text-sm">
-          Chưa có tài khoản123?
+          Chưa có tài khoản1?
           <span
             onClick={() => {
               setPage('signUp');
