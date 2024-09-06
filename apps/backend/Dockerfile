@@ -12,9 +12,9 @@ WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
 
-COPY apps/backend ./apps/backend
 COPY nx.json tsconfig.base.json .eslintrc.json jest.preset.js ./
 COPY libs ./libs
+COPY apps/backend ./apps/backend
 # RUN addgroup --system backend && \
 #           adduser --system -G backend backend
 RUN npx nx run backend:build --verbose

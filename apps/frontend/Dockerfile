@@ -29,7 +29,6 @@ COPY --from=deps /app/package*.json .
 COPY nx.json tsconfig.base.json .eslintrc.json jest.preset.js ./
 COPY libs ./libs
 COPY apps/frontend/ ./apps/frontend
-RUN ls
 RUN npx nx run frontend:build --verbose
 
 RUN npm install --production
