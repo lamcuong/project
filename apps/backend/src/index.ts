@@ -28,7 +28,7 @@ connectMongo()
         //   const test = await ExpenseModel.create({account:"65a652acd860358034647946",category:'Ăn uống',transaction:{amount:100,description:"seed"},type:'outcome'})
 
         // }
-        res.send(ExpenseType.Outcome);
+        res.send('test-ci-time');
       } catch (error) {
         console.log(error);
       }
