@@ -23,7 +23,7 @@ const AuthPage: React.FC<AuthPageProps> = () => {
             }}
             className="cursor-pointer text-primary/90 pl-1"
           >
-            Đăng ký ngay
+            Đăng ký ngay123
           </span>
         </p>
       ) : (
