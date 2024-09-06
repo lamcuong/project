@@ -7,6 +7,7 @@ import route from './routes';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { httpResponse } from './middleware/httpResponse';
+import { ExpenseType } from '@expense-management/shared';
 dotenv.config();
 connectMongo()
   .then(async () => {
@@ -27,12 +28,12 @@ connectMongo()
         //   const test = await ExpenseModel.create({account:"65a652acd860358034647946",category:'Ăn uống',transaction:{amount:100,description:"seed"},type:'outcome'})
 
         // }
-        res.send('ok');
+        res.send(ExpenseType.Outcome);
       } catch (error) {
         console.log(error);
       }
     });
-   
+
     const port = process.env.PORT;
     app.listen(port, () => {
       console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

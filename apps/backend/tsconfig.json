@@ -11,6 +11,10 @@
     }
   ],
   "compilerOptions": {
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@expense-management/backend/*": ["apps/backend/src/*"],
+      "@expense-management/shared": ["libs/shared/src/index.ts"]
+    }
   }
 }

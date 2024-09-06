@@ -1,5 +1,6 @@
 import PaginationComponent from 'rc-pagination'
-import '../../../styles/pagination.css'
+// import '../../../styles/pagination.css'
+import '@expense-management/frontend/styles/pagination.css'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 type PaginationProps = {
   pageSize: number

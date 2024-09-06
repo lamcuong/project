@@ -89,21 +89,23 @@ export const useFormDialog = (props: UseFormDialogProps) => {
         const { value, onChange, name } = props
         switch (item.type) {
           case 'number':
-            const numberValue = item.inputTextProps?.useGrouping
-              ? Number(value).toLocaleString().replace(/,/g, '.')
-              : Number(value)
-            return (
-              <Input
-                value={numberValue == 0 ? '' : numberValue}
-                onChange={(e) => {
-                  const parsedValue = e.target.value.replace(/\./g, '')
-                  if (!isNaN(Number(parsedValue))) {
-                    onChange(e.target.value.replaceAll('.', ''))
-                  }
-                }}
-                type='text'
-              />
-            )
+            {
+              const numberValue = item.inputTextProps?.useGrouping
+                ? Number(value).toLocaleString().replace(/,/g, '.')
+                : Number(value);
+              return (
+                <Input
+                  value={numberValue == 0 ? '' : numberValue}
+                  onChange={(e) => {
+                    const parsedValue = e.target.value.replace(/\./g, '');
+                    if (!isNaN(Number(parsedValue))) {
+                      onChange(e.target.value.replaceAll('.', ''));
+                    }
+                  }}
+                  type="text"
+                />
+              );
+            }
           case 'select':
             return (
               <Select

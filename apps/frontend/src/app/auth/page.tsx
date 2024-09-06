@@ -1,5 +1,6 @@
 import AuthPage from '@expense-management/frontend/container/auth';
 import React from 'react';
+
 type AuthProps = {};
 
 const Auth: React.FC<AuthProps> = async () => {
