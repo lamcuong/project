@@ -25,7 +25,7 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist/apps/backend ./backend
-COPY --from=builder /app/apps/backend/.env ./backend
+
 WORKDIR /app/backend
 # RUN chown -R backend:backend .
 
