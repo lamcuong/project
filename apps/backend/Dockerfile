@@ -1,16 +1,34 @@
 
-FROM node:20-alpine
+FROM --platform=linux/arm64 node:20-alpine AS deps
 
 WORKDIR /app
 
-RUN addgroup --system backend && \
-          adduser --system -G backend backend
+COPY package*.json .
 
-COPY dist/apps/backend .
+RUN npm install
+
+FROM deps AS builder
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+
+COPY apps/backend ./apps/backend
+COPY nx.json tsconfig.base.json .eslintrc.json jest.preset.js ./
+COPY libs ./libs
+# RUN addgroup --system backend && \
+#           adduser --system -G backend backend
+RUN npx nx run backend:build --verbose
 RUN npm install --production
 
-RUN chown -R backend:backend .
+FROM --platform=linux/arm64 node:20-alpine AS runner
 
-USER backend
+WORKDIR /app
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist/apps/backend ./backend
+COPY --from=builder /app/apps/backend/.env ./backend
+WORKDIR /app/backend
+# RUN chown -R backend:backend .
+
+# USER backend
 
 CMD [ "node","index.js" ]
