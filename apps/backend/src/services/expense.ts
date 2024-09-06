@@ -1,5 +1,6 @@
 import AccountModel from '@expense-management/backend/mongo/schemas/account';
 import ExpenseModel from '@expense-management/backend/mongo/schemas/expense';
+import { ExpenseType } from '@expense-management/shared';
 import { injectable } from 'inversify';
 import mongoose from 'mongoose';
 
@@ -11,7 +12,7 @@ export class ExpenseService {
     ).populate('account');
     if (!expense) throw new Error('Create expense failed');
     const amount =
-      expense.type === 'income'
+      expense.type === ExpenseType.Income
         ? expense.transaction?.amount
         : -expense.transaction?.amount!;
     await AccountModel.findOneAndUpdate(
@@ -130,7 +131,7 @@ export class ExpenseService {
       {
         $inc: {
           balance:
-            expense.type === 'income'
+            expense.type === ExpenseType.Income
               ? -expense.transaction?.amount!
               : expense.transaction?.amount,
         },
