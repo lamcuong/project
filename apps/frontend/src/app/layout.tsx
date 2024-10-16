@@ -4,6 +4,7 @@ import { Provider } from '../utils/provider';
 import NextTopLoader from 'nextjs-toploader';
 import { Inter } from 'next/font/google';
 import { cn } from '@expense-management/frontend/lib/utils';
+import { env } from '../config/env';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -19,7 +20,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  console.log('1231232312312', process.env.NEXT_PUBLIC_BASE_URL);
+  console.log('1231232312312', env.BASE_URL);
 
   return (
     <html suppressHydrationWarning lang="en">

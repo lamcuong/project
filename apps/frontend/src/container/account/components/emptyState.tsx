@@ -1,6 +1,6 @@
 import React from 'react'
 import EmptyIcon from '../assets/emptyIcon'
-import { Button } from '@expense-management/frontend/components/ui/button';
+import { Button } from '@expense-management/frontend/components/ui/button/button';
 
 type EmptyStateProps = {
   create: any

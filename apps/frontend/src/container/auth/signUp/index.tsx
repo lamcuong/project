@@ -11,15 +11,15 @@ import {
   FormLabel,
   FormMessage,
 } from '@expense-management/frontend/components/ui/form';
-import { Button } from '@expense-management/frontend/components/ui/button';
+import { Button } from '@expense-management/frontend/components/ui/button/button';
 import { Input } from '@expense-management/frontend/components/ui/input';
-import { ShowPassword } from '../assets/eye'
+import { ShowPassword } from '../assets/eye';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from '@expense-management/frontend/components/ui/dialog';
+} from '@expense-management/frontend/components/ui/dialog/dialog';
 import SuccessIcon from '../assets/success'
 import ArrowDown from '../assets/ArrowDown'
 import { signUpForm } from '@expense-management/frontend/components/shared/forms';

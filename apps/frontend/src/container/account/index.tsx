@@ -12,7 +12,7 @@ import {
   Table,
 } from '@expense-management/frontend/components/ui/table';
 import Pagination from '@expense-management/frontend/components/ui/pagination';
-import { Button } from '@expense-management/frontend/components/ui/button';
+import { Button } from '@expense-management/frontend/components/ui/button/button';
 import { Separator } from '@expense-management/frontend/components/ui/separator';
 import EmptyState from './components/emptyState'
 import Link from 'next/link'

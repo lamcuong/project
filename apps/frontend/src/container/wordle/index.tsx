@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@expense-management/frontend/components/ui/button';
+import { Button } from '@expense-management/frontend/components/ui/button/button';
 import React, { useEffect, useState } from 'react'
 
 type WordleProps = {}

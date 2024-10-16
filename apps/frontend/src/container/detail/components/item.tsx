@@ -15,7 +15,7 @@ import {
   ExpenseInput,
   ExpenseInterface,
 } from '@expense-management/frontend/types/expense';
-import { Button } from '@expense-management/frontend/components/ui/button';
+import { Button } from '@expense-management/frontend/components/ui/button/button';
 import { useMutation } from '@tanstack/react-query';
 import { expenseApi } from '@expense-management/frontend/app/api/expense';
 import { toast } from '@expense-management/frontend/components/ui/use-toast';

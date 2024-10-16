@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@expense-management/frontend/components/ui/button';
+import { Button } from '@expense-management/frontend/components/ui/button/button';
 import { Calendar } from '@expense-management/frontend/components/ui/calendar';
 import {
   Dialog,
@@ -7,7 +7,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@expense-management/frontend/components/ui/dialog';
+} from '@expense-management/frontend/components/ui/dialog/dialog';
 import {
   Form,
   FormField,

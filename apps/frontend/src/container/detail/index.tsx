@@ -4,7 +4,7 @@ import { handleFormatNumber } from '@expense-management/frontend/utils/format';
 import { useParams } from 'next/navigation'
 import React, { useEffect } from 'react'
 import List from './components/list'
-import { Button } from '@expense-management/frontend/components/ui/button';
+import { Button } from '@expense-management/frontend/components/ui/button/button';
 import { useFormDialog } from '@expense-management/frontend/hooks/Form';
 import { useForm } from 'react-hook-form'
 import { expenseForm } from '@expense-management/frontend/components/shared/forms';
