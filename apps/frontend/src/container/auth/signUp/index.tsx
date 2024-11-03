@@ -10,7 +10,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@expense-management/frontend/components/ui/form';
+} from '@expense-management/frontend/components/ui/form1';
 import { Button } from '@expense-management/frontend/components/ui/button/button';
 import { Input } from '@expense-management/frontend/components/ui/input';
 import { ShowPassword } from '../assets/eye';
