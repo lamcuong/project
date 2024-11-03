@@ -1,7 +1,7 @@
 export type Paging = {
   paging: {
-    current_page: number;
-    total_page: number;
+    currentPage: number;
+    totalPages: number;
     limit: number;
     count: number;
   };

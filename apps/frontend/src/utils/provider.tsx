@@ -9,19 +9,15 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import { useState } from 'react'
 import { ConfirmationDialogContextProvider } from '@expense-management/frontend/hooks/ConfirmDialog';
+import { queryConfig } from '../lib/react-query';
 
 export function Provider({ children, session }: { children: React.ReactNode; session?: Session }) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
-        defaultOptions: {
-          queries: {
-            // staleTime: 60 * 1000,
-            refetchOnWindowFocus: false
-          }
-        }
-      })
-  )
+        defaultOptions: queryConfig,
+      }),
+  );
 
   return (
     <QueryClientProvider client={queryClient}>

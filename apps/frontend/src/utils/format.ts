@@ -31,3 +31,11 @@ export const formatVietnameseDate = (date: string | Date) => {
   }
   return moment(date).format(`[${vietnameseWeekday}] - DD/MM/YYYY`)
 }
+
+export const formatNumber = (input: string) => {
+  // Remove all non-digit characters
+  const cleanedInput = input.replace(/\D/g, '');
+
+  // Format the number with dots every three digits from right to left
+  return cleanedInput.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+};

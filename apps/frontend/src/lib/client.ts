@@ -1,3 +1,4 @@
+import { getCookie } from 'cookies-next';
 import { env } from '../config/env';
 
 type RequestOptions = {
@@ -48,10 +49,11 @@ async function fetchApi<T>(
       'Content-Type': 'application/json',
       Accept: 'application/json',
       ...headers,
-      ...(cookie ? { Cookie: cookie } : {}),
+      // ...(cookie ? { Cookie: cookie } : {}),
+      Authorization: `Bearer ${getCookie('Authorization')}`,
     },
     body: body ? JSON.stringify(body) : undefined,
-    credentials: 'include',
+    // credentials: 'include',
     cache,
     next,
   });

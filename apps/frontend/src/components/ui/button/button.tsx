@@ -42,12 +42,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }), {
-          'bg-gray-800 hover:bg-gray-800 text-white': isActive
+          'bg-gray-800 hover:bg-gray-800 text-white': isActive,
         })}
         ref={ref}
         {...props}
-      />
-    )
+      ></Comp>
+    );
   }
 )
 Button.displayName = 'Button'

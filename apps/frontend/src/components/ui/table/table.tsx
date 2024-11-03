@@ -121,100 +121,63 @@ export {
 type TableColumn<Entry> = {
   title: string;
   field: keyof Entry;
-  Cell: ({ entry }: { entry: Entry }) => React.ReactElement;
+  Cell?: ({ entry }: { entry: Entry }) => React.ReactElement;
+  titleClassName?: string;
+  cellClassName?: string;
 };
 type TableProps<Entry> = {
   data: Entry[];
   columns: TableColumn<Entry>[];
+  className?: string;
 };
 
 export const Table = <Entry extends BaseEntity>({
   data,
   columns,
+  className,
 }: TableProps<Entry>) => {
   if (!data?.length) {
     return (
       <div className="flex h-80 flex-col items-center justify-center bg-white text-gray-500">
         {/* <ArchiveX className="size-16" /> */}
-        <h4>No Entries Found</h4>
+        <h4>Không có kết quả</h4>
       </div>
     );
   }
   return (
-    <>
-      <TableElement>
-        <TableHeader>
-          <TableRow>
-            {columns.map((columns, index) => {
-              return (
-                <TableHead key={columns.title + index}>
-                  {columns.title}
-                </TableHead>
-              );
-            })}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.map((entry, entryIndex) => (
-            <TableRow key={entry.id || entryIndex}>
-              {columns.map(({ Cell, title, field }, columnIndex) => {
+    <TableElement className={className}>
+      <TableHeader>
+        <TableRow>
+          {columns.map((columns, index) => {
+            return (
+              <TableHead
+                className={columns.titleClassName}
+                key={columns.title + index}
+              >
+                {columns.title}
+              </TableHead>
+            );
+          })}
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {data.map((entry, entryIndex) => (
+          <TableRow key={(entry.id as string) || entryIndex}>
+            {columns.map(
+              ({ Cell, title, field, cellClassName }, columnIndex) => {
                 return (
-                  <TableCell key={title + columnIndex}>
+                  <TableCell
+                    className={cellClassName}
+                    key={title + columnIndex}
+                  >
                     {Cell ? <Cell entry={entry} /> : `${entry[field]}`}
                   </TableCell>
                 );
-              })}
-            </TableRow>
-          ))}
-        </TableBody>
-      </TableElement>
-    </>
+              },
+            )}
+          </TableRow>
+        ))}
+      </TableBody>
+    </TableElement>
   );
 };
-
-// export type TableProps<Entry> = {
-//   data: Entry[];
-//   columns: TableColumn<Entry>[];
-//   pagination?: TablePaginationProps;
-// };
-
-// export const Table = <Entry extends BaseEntity>({
-//   data,
-//   columns,
-//   pagination,
-// }: TableProps<Entry>) => {
-//   if (!data?.length) {
-//     return (
-//       <div className="flex h-80 flex-col items-center justify-center bg-white text-gray-500">
-//         <ArchiveX className="size-16" />
-//         <h4>No Entries Found</h4>
-//       </div>
-//     );
-//   }
-//   return (
-//     <>
-//       <TableElement>
-//         <TableHeader>
-//           <TableRow>
-//             {columns.map((column, index) => (
-//               <TableHead key={column.title + index}>{column.title}</TableHead>
-//             ))}
-//           </TableRow>
-//         </TableHeader>
-//         <TableBody>
-//           {data.map((entry, entryIndex) => (
-//             <TableRow key={entry?.id || entryIndex}>
-//               {columns.map(({ Cell, field, title }, columnIndex) => (
-//                 <TableCell key={title + columnIndex}>
-//                   {Cell ? <Cell entry={entry} /> : `${entry[field]}`}
-//                 </TableCell>
-//               ))}
-//             </TableRow>
-//           ))}
-//         </TableBody>
-//       </TableElement>
-
-//       {pagination && <TablePagination {...pagination} />}
-//     </>
-//   );
-// };

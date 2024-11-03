@@ -63,7 +63,7 @@ export class AccountController {
   public list = async (req: Request, res: Response) => {
     try {
       const { limit = 10, page = 1, search = '' } = req.query;
-      console.log(limit);
+
       const data = await this.accountService.list(
         req.user?.id!,
         Number(limit),

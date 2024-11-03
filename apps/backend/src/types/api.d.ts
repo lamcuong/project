@@ -11,9 +11,9 @@ declare global {
     interface ResponseList<T extends any = any> extends BaseResponse<T> {
       rows?: T[];
       paging?: {
-        current_page: number;
+        currentPage: number;
         limit: number;
-        total_page: number;
+        totalPage: number;
         total: number;
       };
     }
