@@ -1,41 +1,46 @@
-'use client'
-import moment from 'moment'
-import React, { useMemo } from 'react'
-import Item from './item'
-import _ from 'lodash'
-import { ExpenseInterface } from '@expense-management/frontend/types/expense';
+'use client';
+import moment from 'moment';
+import React, { useMemo } from 'react';
+import Item from './item';
+import _, { Dictionary } from 'lodash';
+import { Expense, FORMAT_VIETNAMESE_DATE } from '@expense-management/shared';
+import { groupByDateAndCategory, groupTransactionsByDate } from '../utils';
 
 type ListProps = {
-  data: ExpenseInterface[]
-  update?: any
-}
+  data: Expense[];
+  update?: any;
+};
 
 const List: React.FC<ListProps> = ({ data, update }) => {
   const groupByDate = useMemo(() => {
-    return _.groupBy(data, (item) => {
-      return moment(item.transaction?.date).format('[Ngày] DD [Tháng] MM [Năm] YYYY')
-    })
-  }, [data])
+    return groupTransactionsByDate(data);
+  }, [data]);
   const groupedList = useMemo(() => {
-    const groupedByDateAndCategory = _.mapValues(groupByDate, (group) => {
-      return _.groupBy(group, 'category')
-    })
-    return groupedByDateAndCategory
-  }, [groupByDate])
+    return groupByDateAndCategory(groupByDate);
+  }, [groupByDate]);
 
   return Object.keys(groupedList || [])
     .sort((a, b) => {
-      const dateA = moment(a, '[Ngày] DD [Tháng] MM [Năm] YYYY')
-      const dateB = moment(b, '[Ngày] DD [Tháng] MM [Năm] YYYY')
-      return Number(dateB) - Number(dateA)
+      const dateA = moment(a, FORMAT_VIETNAMESE_DATE);
+      const dateB = moment(b, FORMAT_VIETNAMESE_DATE);
+      return Number(dateB) - Number(dateA);
     })
     .map((date, index) => {
       return (
-        <div className='first:border-t-[1px] border-b-[1px] border-slate-500' key={index}>
-          <Item update={update} index={index} date={date} groupedList={groupedList} groupedByDate={groupByDate} />
+        <div
+          className="first:border-t-[1px] border-b-[1px] border-slate-500"
+          key={index}
+        >
+          <Item
+            update={update}
+            index={index}
+            date={date}
+            groupedList={groupedList}
+            groupedByDate={groupByDate}
+          />
         </div>
-      )
-    })
-}
+      );
+    });
+};
 
-export default List
+export default List;

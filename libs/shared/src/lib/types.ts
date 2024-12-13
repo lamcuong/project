@@ -1,4 +1,16 @@
 import { ObjectId } from 'mongoose';
+import { ExpenseType } from './enum';
+
+export type BaseEntity = {
+  id: ID;
+  createdAt: Date;
+};
+export type Entity<T> = {
+  [K in keyof T]: T[K];
+} & BaseEntity;
+
+export type BaseListResponse<T> = BaseResponse<ListResponse<T>>;
+
 export interface BaseResponse<T> {
   data: T;
   success: boolean;
@@ -17,8 +29,6 @@ export interface ListResponse<T> {
   paging: PaginationInfo;
 }
 
-export type BaseListResponse<T> = BaseResponse<ListResponse<T>>;
-
 export interface BaseParams<T = unknown> {
   limit?: number;
   page?: number;
@@ -32,10 +42,17 @@ export type Account = Entity<{
   initialBalance: number;
   balance: number;
 }>;
-export type BaseEntity = {
-  id: ID;
-  createdAt: Date;
-};
-export type Entity<T> = {
-  [K in keyof T]: T[K];
-} & BaseEntity;
+
+export type Expense = Entity<{
+  type: ExpenseType;
+  transaction: {
+    description: string;
+    date: Date;
+    amount: number;
+  };
+  category: string;
+  account_id: string;
+  id: string;
+  created_at: string;
+  updated_at: string;
+}>;

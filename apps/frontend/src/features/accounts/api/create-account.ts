@@ -7,7 +7,9 @@ import { getAccountsQueryOptions } from './get-accounts';
 
 export const createAccountInputSchema = z.object({
   name: z.string().min(1, 'Tên tài khoản không được để trống'),
-  initialBalance: z.coerce.number().min(1, 'Số dư ban đầu không được để trống'),
+  initialBalance: z.number({
+    required_error: 'Số dư ban đầu không được để trống',
+  }),
 });
 
 export type CreateAccountInput = z.infer<typeof createAccountInputSchema>;

@@ -1,41 +1,37 @@
-import moment from 'moment'
+import moment from 'moment';
 export const handleFormatNumber = (number?: string | number) => {
-  return Number(number).toLocaleString().replace(/,/g, '.')
-}
+  return Number(number).toLocaleString().replace(/,/g, '.');
+};
 export const formatVietnameseDate = (date: string | Date) => {
-  const weekday = moment(date).weekday()
-  let vietnameseWeekday = ''
+  const weekday = moment(date).weekday();
+  let vietnameseWeekday = '';
   switch (weekday) {
     case 1:
-      vietnameseWeekday = 'Thứ 2'
-      break
+      vietnameseWeekday = 'Thứ 2';
+      break;
     case 2:
-      vietnameseWeekday = 'Thứ 3'
-      break
+      vietnameseWeekday = 'Thứ 3';
+      break;
     case 3:
-      vietnameseWeekday = 'Thứ 4'
-      break
+      vietnameseWeekday = 'Thứ 4';
+      break;
     case 4:
-      vietnameseWeekday = 'Thứ 5'
-      break
+      vietnameseWeekday = 'Thứ 5';
+      break;
     case 5:
-      vietnameseWeekday = 'Thứ 6'
-      break
+      vietnameseWeekday = 'Thứ 6';
+      break;
     case 6:
-      vietnameseWeekday = 'Thứ 7'
-      break
+      vietnameseWeekday = 'Thứ 7';
+      break;
 
     default:
-      vietnameseWeekday = 'Chủ nhật'
-      break
+      vietnameseWeekday = 'Chủ nhật';
+      break;
   }
-  return moment(date).format(`[${vietnameseWeekday}] - DD/MM/YYYY`)
-}
+  return moment(date).format(`[${vietnameseWeekday}] - DD/MM/YYYY`);
+};
 
-export const formatNumber = (input: string) => {
-  // Remove all non-digit characters
-  const cleanedInput = input.replace(/\D/g, '');
-
-  // Format the number with dots every three digits from right to left
-  return cleanedInput.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+export const formatMoney = (input: number) => {
+  return input.toLocaleString('vi-VN').replace(/,/g, '.');
 };

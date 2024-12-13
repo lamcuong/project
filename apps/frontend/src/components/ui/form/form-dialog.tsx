@@ -14,7 +14,7 @@ type FormDialogProps = {
   isDone: boolean;
   triggerButton: ReactElement;
   submitButton: ReactElement;
-  title: string;
+  title: string | ReactElement;
   children: ReactNode;
 };
 
@@ -25,7 +25,7 @@ const FormDialog = ({
   title,
   children,
 }: FormDialogProps) => {
-  const { isOpen, open, close, toggle } = useDisclosure();
+  const { isOpen, close, toggle } = useDisclosure();
   useEffect(() => {
     if (isDone) {
       close();

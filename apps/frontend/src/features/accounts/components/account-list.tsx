@@ -1,5 +1,5 @@
 import { Table } from '@expense-management/frontend/components/ui/table/table';
-import { formatNumber } from '@expense-management/frontend/utils/format';
+import { formatMoney } from '@expense-management/frontend/utils/format';
 import { useState } from 'react';
 import { useAccounts } from '../api/get-accounts';
 import { Skeleton } from '@expense-management/frontend/components/ui/skeleton';
@@ -12,14 +12,14 @@ const AccountList = () => {
     page: 1,
     limit: 10,
   });
-  const { data: accountsQuery, isLoading } = useAccounts({
+  const accountQuery = useAccounts({
     params: {
       page: paging.page,
       limit: paging.limit,
     },
   });
-
-  if (isLoading) {
+  const accounts = accountQuery.data?.data;
+  if (accountQuery.isLoading) {
     return (
       <div className="mt-10">
         <Skeleton className="h-20" times={1} gap={0} />
@@ -29,11 +29,12 @@ const AccountList = () => {
       </div>
     );
   }
-  if (!accountsQuery?.data) return null;
+
+  if (!accounts) return null;
   return (
     <Table
       className="border mt-10 table-fixed"
-      data={accountsQuery.data.list.map((item, index) => ({
+      data={accounts.list.map((item, index) => ({
         ...item,
         itemNo: index + 1,
       }))}
@@ -55,7 +56,7 @@ const AccountList = () => {
           Cell: ({ entry }) => {
             return (
               <p className="tracking-[0.5px]">
-                {formatNumber(`${entry.initialBalance}`)} VND
+                {formatMoney(entry.initialBalance)} VND
               </p>
             );
           },

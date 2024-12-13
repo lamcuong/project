@@ -20,7 +20,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  console.log('1231232312312', env.BASE_URL);
   return (
     <html suppressHydrationWarning lang="en">
       <body className={cn('min-h-screen bg-background antialiased')}>

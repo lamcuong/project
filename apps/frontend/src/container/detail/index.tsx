@@ -1,23 +1,26 @@
 'use client'
 import { Separator } from '@expense-management/frontend/components/ui/separator';
-import { handleFormatNumber } from '@expense-management/frontend/utils/format';
-import { useParams } from 'next/navigation'
-import React, { useEffect } from 'react'
-import List from './components/list'
+import {
+  formatMoney,
+  handleFormatNumber,
+} from '@expense-management/frontend/utils/format';
+import { useParams } from 'next/navigation';
+import React, { useEffect } from 'react';
+import List from './components/list';
 import { Button } from '@expense-management/frontend/components/ui/button/button';
 import { useFormDialog } from '@expense-management/frontend/hooks/Form';
-import { useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form';
 import { expenseForm } from '@expense-management/frontend/components/shared/forms';
-import * as z from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useToast } from '@expense-management/frontend/components/ui/use-toast';
-import { MoveLeft, PlusIcon } from 'lucide-react'
-import Link from 'next/link'
+import { MoveLeft, PlusIcon } from 'lucide-react';
+import Link from 'next/link';
 import { accountApi } from '@expense-management/frontend/app/api/account';
 import { expenseApi } from '@expense-management/frontend/app/api/expense';
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { ExpenseInput } from '@expense-management/frontend/types/expense';
-import { useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query';
 import {
   accountKeys,
   expenseKeys,
@@ -249,13 +252,13 @@ const AccountDetail: React.FC<AccountDetailProps> = () => {
                 <div className="flex-1">
                   <p className="text-md font-[500] mb-1"> Số dư ban đầu:</p>
                   <p className="text-sm">
-                    {handleFormatNumber(account?.data?.initialBalance)} VND
+                    {formatMoney(account?.data?.initialBalance || 0)} VND
                   </p>
                 </div>
                 <div className="flex-1">
                   <p className="text-md font-[500] mb-1"> Số dư hiện tại:</p>
                   <p className="text-sm">
-                    {handleFormatNumber(account?.data?.balance)} VND
+                    {formatMoney(account?.data?.balance || 0)} VND
                   </p>
                 </div>
               </div>
@@ -268,16 +271,6 @@ const AccountDetail: React.FC<AccountDetailProps> = () => {
                   <PlusIcon />
                   <p className="hidden md:block">Tạo giao dịch mới</p>
                 </Button>
-                {/* <div className="flex gap-10">
-                   <Button isActive={overallType === 'all'} onClick={() => setOverallType('all')}>
-                     Tất cả chi tiêu
-                   </Button>
-
-                   <Button isActive={overallType === 'month'} onClick={() => setOverallType('month')}>
-                     Tổng hợp theo tháng
-                   </Button>
-                 </div> */}
-                {/* <Input placeholder='Tìm kiếm khoản chi tiêu theo ngày' className='w-1/3 xl:w-1/5 ' /> */}
               </div>
             </div>
           )}
