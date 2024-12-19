@@ -26,7 +26,7 @@ jobs:
           path: |
             **/node_modules
             **/.next/cache
-          key: ${{ runner.os }}-node-20-cache-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-20-cache-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.ts', '**/*.tsx') }}
           restore-keys: ${{ runner.os }}-node-20-cache-
 
       - name: Install dependencies
