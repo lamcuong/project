@@ -64,13 +64,12 @@ export class AccountService {
         },
       },
     ]);
-    console.log('12312', list[0]);
     const count = list[0]?.total[0]?.count;
     return {
       list: list[0].data,
       paging: {
-        current_page: page,
-        total_page: Math.ceil(count / limit),
+        currentPage: page,
+        totalPages: Math.ceil(count / limit),
         limit,
         count,
       },

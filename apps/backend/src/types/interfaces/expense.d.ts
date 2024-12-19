@@ -11,6 +11,15 @@ declare global {
       account: ExpenseCore.Account;
     }
   }
-  type ExpenseInput = Partial<ExpenseCore.Expense>;
+  type ExpenseInput = {
+    type: string;
+    transaction: {
+      description?: string;
+      date: Date;
+      amount: number;
+    };
+    category: string;
+    account: string;
+  };
 }
 export {};

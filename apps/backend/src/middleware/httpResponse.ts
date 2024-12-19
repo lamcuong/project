@@ -1,45 +1,36 @@
 import { NextFunction, Request, Response } from 'express';
 
 export const httpResponse = (req: Request, res: Response, next: NextFunction) => {
-  res.unauth = ({ status = 401, data, message = "You're not authorized", errors } = {}) => {
+  res.unauth = ({ status = 401, message = "You're not authorized" } = {}) => {
     return res.status(status).error({
-      errors,
       message,
-      data,
       status,
-      success: false
+      success: false,
     });
   };
-  res.error = ({ status = 422, data, message = 'Error', errors } = {}) => {
+  res.error = ({ status = 422, message = 'Error' } = {}) => {
     return res.status(status).json({
-      errors,
       message,
-      data,
       status,
-      success: false
+      success: false,
     });
   };
-  res.badreq = ({ status = 400, data, message = 'Bad request', errors } = {}) => {
+  res.badreq = ({ status = 400, message = 'Bad request' } = {}) => {
     return res.status(status).error({
-      errors,
       message,
-      data,
       status,
-      success: false
+      success: false,
     });
   };
-  res.internal = ({ status = 500, data, message = 'Internal', errors } = {}) => {
+  res.internal = ({ status = 500, message = 'Internal' } = {}) => {
     return res.status(status).error({
-      errors,
       message,
-      data,
       status,
-      success: false
+      success: false,
     });
   };
-  res.success = ({ status = 200, data, message = '', errors, ...customField } = {}) => {
+  res.success = ({ status = 200, data, message = '', ...customField } = {}) => {
     return res.status(status).json({
-      errors,
       message,
       data,
       status,

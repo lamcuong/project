@@ -1,5 +1,5 @@
 import Wordle from '@expense-management/frontend/container/wordle';
-import MainLayout from '@expense-management/frontend/layouts';
+import MainLayout from '@expense-management/frontend/components/ui/layouts';
 import React from 'react';
 
 type WordlePageProps = {};

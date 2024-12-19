@@ -32,7 +32,6 @@ export class UserService {
   };
   public me = async (id: string) => {
     const user = await UserModel.findById(id);
-    console.log({ user });
     return user?.toObject();
   };
   public googleSignIn = async (input: Google) => {

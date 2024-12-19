@@ -110,8 +110,8 @@ export class ExpenseService {
     return {
       list: list[0].data,
       paging: {
-        current_page: page,
-        total_page: Math.ceil(count / limit),
+        currentPage: page,
+        totalPages: Math.ceil(count / limit),
         limit,
         count,
       },
@@ -220,7 +220,6 @@ export class ExpenseService {
         },
       },
     ]);
-    console.log(list);
     return list;
   };
 }

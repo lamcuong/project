@@ -5,7 +5,7 @@ import express from 'express';
 const controller = container.get(ExpenseController);
 
 const route = express();
-route.post('/create', auth, controller.create);
+route.post('/create/:account_id', auth, controller.create);
 route.put('/update/:account_id', auth, controller.update);
 route.get('/list/:account_id', auth, controller.list);
 // route.get('/month-detail/:account_id', auth, controller.monthDetail);

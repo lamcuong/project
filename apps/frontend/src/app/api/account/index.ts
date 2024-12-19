@@ -5,6 +5,7 @@ import {
   AccountResponse,
   AccountListResponse,
 } from '@expense-management/frontend/types/account';
+import { BaseParams } from '@expense-management/shared';
 
 const create = (input: AccountInput) => {
   return handleRequest<AccountResponse>(`${apiAccount}/create`, {

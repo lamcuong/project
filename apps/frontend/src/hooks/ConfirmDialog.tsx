@@ -7,7 +7,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@expense-management/frontend/components/ui/alert-dialog';
-import { Button } from '@expense-management/frontend/components/ui/button';
+import { Button } from '@expense-management/frontend/components/ui/button/button';
 import React, { ReactNode, useCallback, useContext, useState } from 'react';
 
 type ConfirmDialogType = {
