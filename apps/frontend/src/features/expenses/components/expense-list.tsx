@@ -2,15 +2,11 @@
 import { useParams } from 'next/navigation';
 import { useExpenses } from '../api/get-expenses';
 import { Skeleton } from '@expense-management/frontend/components/ui/skeleton';
-import List from '@expense-management/frontend/container/detail/components/list';
 import { useMemo } from 'react';
 import { groupByDateAndCategory, groupTransactionsByDate } from '../utils';
 import { FORMAT_VIETNAMESE_DATE } from '@expense-management/shared';
 import moment from 'moment';
-import Item from '@expense-management/frontend/container/detail/components/item';
 import ExpenseItem from './expense-item';
-
-type ExpenseListProps = {};
 
 const ExpenseList = () => {
   const { id } = useParams();
