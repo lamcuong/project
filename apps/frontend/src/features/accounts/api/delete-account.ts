@@ -2,11 +2,9 @@ import { api } from '@expense-management/frontend/lib/client';
 import { MutationConfig } from '@expense-management/frontend/lib/react-query';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { getAccountsQueryOptions } from './get-accounts';
-import { Account, BaseResponse, ID } from '@expense-management/shared';
+import { Account, BaseResponse } from '@expense-management/shared';
 
-export const deleteAccount = (
-  accountId: ID,
-): Promise<BaseResponse<Account>> => {
+export const deleteAccount = (accountId: string): Promise<BaseResponse<Account>> => {
   return api.delete(`/account/delete/${accountId}`);
 };
 
