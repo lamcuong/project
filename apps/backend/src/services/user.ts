@@ -27,8 +27,9 @@ export class UserService {
     }
     const token = jwt.sign({ _id: user._id.toString() }, process.env.SECRET_KEY ?? '');
     return {
-      token
-    }
+      user,
+      token,
+    };
   };
   public me = async (id: string) => {
     const user = await UserModel.findById(id);

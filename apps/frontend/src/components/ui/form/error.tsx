@@ -3,15 +3,9 @@ export type ErrorProps = {
 };
 
 export const Error = ({ errorMessage }: ErrorProps) => {
-  if (!errorMessage) return null;
-
   return (
-    <div
-      role="alert"
-      aria-label={errorMessage}
-      className="text-sm font-semibold text-red-500 mt-1"
-    >
+    <p className="text-xs font-medium text-red-500 mt-1 min-h-4">
       {errorMessage}
-    </div>
+    </p>
   );
 };

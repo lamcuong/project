@@ -1,8 +1,7 @@
-import { ObjectId } from 'mongoose';
 import { ExpenseType } from './enum';
 
 export type BaseEntity = {
-  id: ID;
+  id: string;
   createdAt: Date;
 };
 export type Entity<T> = {
@@ -30,13 +29,14 @@ export interface ListResponse<T> {
 }
 
 export interface BaseParams<T = unknown> {
-  limit?: number;
-  page?: number;
-  search?: string;
+  meta?: {
+    limit?: number;
+    page?: number;
+    search?: string;
+  };
   input?: T;
   id?: string;
 }
-export type ID = string | number | ObjectId;
 export type Account = Entity<{
   name: string;
   initialBalance: number;
@@ -52,7 +52,15 @@ export type Expense = Entity<{
   };
   category: string;
   account_id: string;
-  id: string;
   created_at: string;
   updated_at: string;
+}>;
+export type User = Entity<{
+  username: string;
+  password: string;
+  email: string;
+  type: string;
+  social_id: string;
+  name: string;
+  avatar: string;
 }>;

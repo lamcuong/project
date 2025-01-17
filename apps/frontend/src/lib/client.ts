@@ -1,5 +1,6 @@
 import { getCookie } from 'cookies-next';
 import { env } from '../config/env';
+import { toast } from '../components/ui/use-toast';
 
 type RequestOptions = {
   method?: string;
@@ -60,13 +61,7 @@ async function fetchApi<T>(
 
   if (!response.ok) {
     const message = (await response.json()).message || response.statusText;
-    // if (typeof window !== 'undefined') {
-    //   useNotifications.getState().addNotification({
-    //     type: 'error',
-    //     title: 'Error',
-    //     message,
-    //   });
-    // }
+    toast({ title: message });
     throw new Error(message);
   }
 
