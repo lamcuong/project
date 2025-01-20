@@ -10,7 +10,7 @@ const Accounts: React.FC<AccountsProps> = () => {
     <MainLayout>
       <>
         <div className="flex justify-between items-center">
-          <h1 className="text-xl ">Quản lý chi tiêu</h1>
+          <h1 className="text-xl ">Quản lý chiergergre tiêu</h1>
           <div>
             <CreateAccount />
           </div>
