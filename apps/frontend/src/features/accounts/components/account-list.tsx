@@ -14,8 +14,10 @@ const AccountList = () => {
   });
   const accountQuery = useAccounts({
     params: {
-      page: paging.page,
-      limit: paging.limit,
+      meta: {
+        page: paging.page,
+        limit: paging.limit,
+      },
     },
   });
   const accounts = accountQuery.data?.data;

@@ -1,9 +1,17 @@
-import mongoose, { SchemaTypes } from 'mongoose';
+import mongoose, { SchemaTypes, Model } from 'mongoose';
 import collections from '../collections';
 import { defaultPlugin } from '../plugins/defaultPlugin';
 import ExpenseModel from './expense';
 import { ExpenseType } from '@expense-management/shared';
-const schema = new mongoose.Schema<ExpenseCore.Account>(
+interface AccountMethods {
+  getNewBalance(): Promise<number>;
+}
+type AccountModel = Model<ExpenseCore.Account, {}, AccountMethods>;
+const schema = new mongoose.Schema<
+  ExpenseCore.Account,
+  AccountModel,
+  AccountMethods
+>(
   {
     name: {
       type: SchemaTypes.String,
@@ -19,7 +27,7 @@ const schema = new mongoose.Schema<ExpenseCore.Account>(
       ref: collections.user,
     },
   },
-  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
+  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } },
 );
 defaultPlugin(schema);
 
@@ -48,5 +56,8 @@ schema.methods.getNewBalance = async function () {
   return this.initialBalance + newBalance[0].newBalance;
 };
 
-const AccountModel = mongoose.model(collections.account, schema);
-export default AccountModel;
+const Account = mongoose.model<ExpenseCore.Account, AccountModel>(
+  collections.account,
+  schema,
+);
+export default Account;

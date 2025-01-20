@@ -8,24 +8,22 @@ import {
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
 export const getAccounts = ({
-  page = 1,
-  limit,
+  meta = {
+    page: 1,
+    limit: 10,
+  },
 }: Partial<BaseParams>): Promise<BaseListResponse<Account>> => {
   return api.get('/account/list', {
-    params: {
-      page,
-      limit,
-    },
+    params: meta,
   });
 };
 
 export const getAccountsQueryOptions = ({
-  page = 1,
-  limit = 10,
+  meta = { page: 1, limit: 10 },
 }: BaseParams = {}) => {
   return queryOptions({
-    queryFn: () => getAccounts({ page, limit }),
-    queryKey: ['accounts', { page, limit }],
+    queryFn: () => getAccounts({ meta }),
+    queryKey: ['accounts', { page: meta?.page, limit: meta?.limit }],
   });
 };
 

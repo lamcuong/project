@@ -1,8 +1,8 @@
 import {  injectable } from 'inversify';
 import AccountModel from '../mongo/schemas/account';
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 import ExpenseModel from '@expense-management/backend/mongo/schemas/expense';
-  @injectable()
+@injectable()
 export class AccountService {
   regex = (pattern: string) => new RegExp(`.*${pattern}.*`);
   public create = async (input: AccountInput) => {
@@ -10,22 +10,42 @@ export class AccountService {
     return account.toObject();
   };
   public update = async (account_id: ExpenseCore.ID, input: AccountInput) => {
-    const account = await AccountModel.findOneAndUpdate({ _id: account_id, user: input.user }, input);
+    const account = await AccountModel.findOneAndUpdate(
+      { _id: account_id, user: input.user },
+      input,
+    );
     if (!account) throw new Error('Account not found!');
-    account.balance! += input.initialBalance! - account.initialBalance!;
+    account.balance += input.initialBalance - account.initialBalance;
     await account.save();
     return account?.toObject();
   };
-  public delete = async (account_id: ExpenseCore.ID, user_id: ExpenseCore.ID) => {
-    const account = await AccountModel.findOneAndDelete({ _id: account_id, user: user_id },{});
+  public delete = async (
+    account_id: ExpenseCore.ID,
+    user_id: ExpenseCore.ID,
+  ) => {
+    const account = await AccountModel.findOneAndDelete(
+      { _id: account_id, user: user_id },
+      {},
+    );
     await ExpenseModel.deleteMany({ account: account_id });
     return account?.toObject();
   };
-  public detail = async (account_id: ExpenseCore.ID, user_id: ExpenseCore.ID) => {
-    const account = await AccountModel.findOne({ _id: account_id, user: user_id });
+  public detail = async (
+    account_id: ExpenseCore.ID,
+    user_id: ExpenseCore.ID,
+  ) => {
+    const account = await AccountModel.findOne({
+      _id: account_id,
+      user: user_id,
+    });
     return account?.toObject();
   };
-  public list = async (user_id: ExpenseCore.ID, limit: number, page: number, search?: string) => {
+  public list = async (
+    user_id: ExpenseCore.ID,
+    limit: number,
+    page: number,
+    search?: string,
+  ) => {
     const skip = (page - 1) * limit;
     const list = await AccountModel.aggregate([
       {

@@ -4,6 +4,6 @@ import { config } from 'dotenv';
 config();
 
 const connectMongo = () => {
-  return mongoose.connect(process.env.MONGODB_HOST!);
+  return mongoose.connect(process.env.MONGODB_HOST);
 };
 export default connectMongo;

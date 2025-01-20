@@ -15,12 +15,5 @@ declare global {
       count: number;
     };
   }
-  interface BaseParams<T = any> {
-    limit?: number;
-    page?: number;
-    search?: string;
-    input?: T;
-    id?: string;
-  }
 }
 export {};

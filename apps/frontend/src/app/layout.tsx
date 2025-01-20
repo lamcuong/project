@@ -4,7 +4,6 @@ import { Provider } from '../utils/provider';
 import NextTopLoader from 'nextjs-toploader';
 import { Inter } from 'next/font/google';
 import { cn } from '@expense-management/frontend/lib/utils';
-import { env } from '../config/env';
 
 const inter = Inter({
   subsets: ['latin'],

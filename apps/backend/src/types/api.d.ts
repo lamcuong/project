@@ -5,10 +5,10 @@ declare global {
       status?: boolean;
       data?: T;
     }
-    interface Response<T extends any = any> {
+    interface Response<T> {
       data?: T;
     }
-    interface ResponseList<T extends any = any> extends BaseResponse<T> {
+    interface ResponseList<T> extends BaseResponse<T> {
       rows?: T[];
       paging?: {
         currentPage: number;

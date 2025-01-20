@@ -60,6 +60,12 @@ const CreateAccount = ({
             data: values,
           });
         }}
+        options={{
+          defaultValues: {
+            initialBalance: 0,
+            name: '',
+          },
+        }}
         id="create-account"
       >
         {({ formState, control }) => {

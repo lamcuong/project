@@ -128,7 +128,7 @@ const ExpenseItem = ({
                               className={cn(
                                 'text-green-500 font-[400] text-md text-right flex-1 md:min-w-[20%] text-sm md:text-base md:block hidden',
                                 {
-                                  'text-red-400': amount! < 0,
+                                  'text-red-400': amount < 0,
                                 },
                               )}
                             >
@@ -140,7 +140,7 @@ const ExpenseItem = ({
                                   className={cn(
                                     'text-green-500 font-[400] text-md text-right flex-1 underline cursor-pointer md:min-w-[20%] text-sm md:text-base block md:hidden ',
                                     {
-                                      'text-red-400': amount! < 0,
+                                      'text-red-400': amount < 0,
                                     },
                                   )}
                                 >

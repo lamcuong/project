@@ -7,8 +7,7 @@ import { ThemeProvider } from 'next-themes'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
-import { useState } from 'react'
-import { ConfirmationDialogContextProvider } from '@expense-management/frontend/hooks/ConfirmDialog';
+import { useState } from 'react';
 import { queryConfig } from '../lib/react-query';
 
 export function Provider({ children, session }: { children: React.ReactNode; session?: Session }) {
@@ -22,12 +21,10 @@ export function Provider({ children, session }: { children: React.ReactNode; ses
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider session={session}>
-        <ConfirmationDialogContextProvider>
-          <ThemeProvider>{children}</ThemeProvider>
-          <Toaster />
-          <ReactQueryDevtools buttonPosition='bottom-left' />
-        </ConfirmationDialogContextProvider>
+        <ThemeProvider>{children}</ThemeProvider>
+        <Toaster />
+        <ReactQueryDevtools buttonPosition="bottom-left" />
       </SessionProvider>
     </QueryClientProvider>
-  )
+  );
 }

@@ -32,12 +32,12 @@ export class UserController {
         removeIfNotExist({
           username,
           password,
-        })
+        }),
       );
       if (!data) {
         return res.unauth({ message: 'Username or password is wrong' });
       }
-      // @ts-ignore
+
       return res.success({ data });
     } catch (error) {
       return res.internal();
@@ -62,10 +62,9 @@ export class UserController {
         avatar,
       });
       if (!data) {
-        return res.unauth({ message: "Login Failed" });
+        return res.unauth({ message: 'Login Failed' });
       }
-      // @ts-ignore
-      return res.success({ token: data });
+      return res.success({ data: data });
     } catch (error) {
       console.log(error);
       return res.internal();
