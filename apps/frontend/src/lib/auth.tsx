@@ -1,4 +1,4 @@
-import { User } from '@expense-management/shared';
+import { BaseResponse, User } from '@expense-management/shared';
 import { api } from './client';
 import { queryOptions, useMutation, useQuery } from '@tanstack/react-query';
 import { z } from 'zod';
