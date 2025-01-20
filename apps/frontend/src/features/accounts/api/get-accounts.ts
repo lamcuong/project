@@ -13,7 +13,7 @@ export const getAccounts = ({
     limit: 10,
   },
 }: Partial<BaseParams>): Promise<BaseListResponse<Account>> => {
-  return api.get('/account/list', {
+  return api.get('/account', {
     params: meta,
   });
 };

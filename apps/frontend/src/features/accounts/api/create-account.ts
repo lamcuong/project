@@ -19,7 +19,7 @@ export const createAccount = ({
 }: {
   data: CreateAccountInput;
 }): Promise<BaseResponse<Account>> => {
-  return api.post('/account/create', data);
+  return api.post('/account', data);
 };
 
 type UseCreateAccountOptions = {

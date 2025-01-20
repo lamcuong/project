@@ -12,9 +12,7 @@ export const deleteExpense = ({
   accountId: string;
   expenseId: string;
 }): Promise<BaseResponse<Expense>> => {
-  return api.delete(
-    `/expense/delete/account/${accountId}/expense/${expenseId}`,
-  );
+  return api.delete(`/expense/account/${accountId}/expense/${expenseId}`);
 };
 
 type UseDeleteExpenseOptions = {

@@ -25,7 +25,7 @@ export const updateExpense = ({
   data: UpdateExpenseInput;
   accountId: string;
 }): Promise<BaseResponse<Expense>> => {
-  return api.put(`/expense/update/${accountId}`, data);
+  return api.put(`/expense/${accountId}`, data);
 };
 type UseUpdateExpenseOptions = {
   mutationConfig: MutationConfig<typeof updateExpense>;
