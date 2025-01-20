@@ -5,12 +5,11 @@ import express from 'express';
 const controller = container.get(ExpenseController);
 
 const route = express();
-route.post('/create/:account_id', auth, controller.create);
-route.put('/update/:account_id', auth, controller.update);
-route.get('/list/:account_id', auth, controller.list);
-// route.get('/month-detail/:account_id', auth, controller.monthDetail);
+route.post('/create/:accountId', auth, controller.create);
+route.put('/update/:accountId', auth, controller.update);
+route.get('/list/:accountId', auth, controller.list);
 route.delete(
-  '/delete/account/:account_id/expense/:expense_id',
+  '/delete/account/:accountId/expense/:expenseId',
   auth,
   controller.delete,
 );

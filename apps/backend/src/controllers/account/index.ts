@@ -27,9 +27,9 @@ export class AccountController {
   public update = async (req: Request, res: Response) => {
     try {
       const { name, initialBalance } = req.body;
-      const { account_id } = req.params;
+      const { accountId } = req.params;
       const data = await this.accountService.update(
-        account_id,
+        accountId,
         removeIfNotExist({
           name,
           initialBalance,
@@ -44,8 +44,8 @@ export class AccountController {
   };
   public detail = async (req: Request, res: Response) => {
     try {
-      const { account_id } = req.params;
-      const data = await this.accountService.detail(account_id, req.user.id);
+      const { accountId } = req.params;
+      const data = await this.accountService.detail(accountId, req.user.id);
       return res.success({ data });
     } catch (error) {
       return res.internal();
@@ -53,8 +53,8 @@ export class AccountController {
   };
   public delete = async (req: Request, res: Response) => {
     try {
-      const { account_id } = req.params;
-      const data = await this.accountService.delete(account_id, req.user.id);
+      const { accountId } = req.params;
+      const data = await this.accountService.delete(accountId, req.user.id);
       return res.success({ data });
     } catch (error) {
       return res.internal();

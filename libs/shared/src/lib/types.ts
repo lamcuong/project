@@ -51,9 +51,9 @@ export type Expense = Entity<{
     amount: number;
   };
   category: string;
-  account_id: string;
-  created_at: string;
-  updated_at: string;
+  accountId: string;
+  createdAt: string;
+  updatedAt: string;
 }>;
 export type User = Entity<{
   username: string;

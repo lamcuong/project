@@ -11,11 +11,11 @@ export class ExpenseController {
   public create = async (req: Request, res: Response) => {
     try {
       const { type, category, transaction } = req.body;
-      const { account_id } = req.params;
+      const { accountId } = req.params;
       const data = await this.expenseService.create({
         type,
         transaction,
-        account: account_id,
+        account: accountId,
         category,
       });
       return res.success({ data });
@@ -27,15 +27,15 @@ export class ExpenseController {
   public update = async (req: Request, res: Response) => {
     try {
       const { type, category, transaction, id } = req.body;
-      const { account_id } = req.params;
+      const { accountId } = req.params;
       const data = await this.expenseService.update(
         id,
-        account_id,
+        accountId,
         removeIfNotExist({
           type,
           category,
           transaction,
-          account: account_id,
+          account: accountId,
         }),
       );
       return res.success({ data });
@@ -47,9 +47,9 @@ export class ExpenseController {
   public list = async (req: Request, res: Response) => {
     try {
       const { limit = 10, page = 1 } = req.query;
-      const { account_id } = req.params;
+      const { accountId } = req.params;
       const data = await this.expenseService.list(
-        account_id,
+        accountId,
         Number(limit),
         Number(page),
       );
@@ -61,27 +61,10 @@ export class ExpenseController {
       return res.internal();
     }
   };
-  // public monthDetail = async (req: Request, res: Response) => {
-  //   try {
-  //     const { account_id } = req.params;
-  //     const { limit = 10, page = 1, type = 'month', month = 11 } = req.query;
-  //     const data = await this.expenseService.monthDetail(
-  //       account_id,
-  //       type as string,
-  //       Number(limit),
-  //       Number(page),
-  //       Number(month)
-  //     );
-  //     return res.success({ data });
-  //   } catch (error) {
-  //     console.log(error);
-  //     return res.internal();
-  //   }
-  // };
   public delete = async (req: Request, res: Response) => {
     try {
-      const { account_id, expense_id } = req.params;
-      const data = await this.expenseService.delete(account_id, expense_id);
+      const { accountId, expenseId } = req.params;
+      const data = await this.expenseService.delete(accountId, expenseId);
       return res.success({ data });
     } catch (error) {
       return res.internal();

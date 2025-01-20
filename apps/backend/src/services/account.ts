@@ -9,9 +9,9 @@ export class AccountService {
     const account = await AccountModel.create(input);
     return account.toObject();
   };
-  public update = async (account_id: ExpenseCore.ID, input: AccountInput) => {
+  public update = async (accountId: ExpenseCore.ID, input: AccountInput) => {
     const account = await AccountModel.findOneAndUpdate(
-      { _id: account_id, user: input.user },
+      { _id: accountId, user: input.user },
       input,
     );
     if (!account) throw new Error('Account not found!');
@@ -19,29 +19,23 @@ export class AccountService {
     await account.save();
     return account?.toObject();
   };
-  public delete = async (
-    account_id: ExpenseCore.ID,
-    user_id: ExpenseCore.ID,
-  ) => {
+  public delete = async (accountId: ExpenseCore.ID, userId: ExpenseCore.ID) => {
     const account = await AccountModel.findOneAndDelete(
-      { _id: account_id, user: user_id },
+      { _id: accountId, user: userId },
       {},
     );
-    await ExpenseModel.deleteMany({ account: account_id });
+    await ExpenseModel.deleteMany({ account: accountId });
     return account?.toObject();
   };
-  public detail = async (
-    account_id: ExpenseCore.ID,
-    user_id: ExpenseCore.ID,
-  ) => {
+  public detail = async (accountId: ExpenseCore.ID, userId: ExpenseCore.ID) => {
     const account = await AccountModel.findOne({
-      _id: account_id,
-      user: user_id,
+      _id: accountId,
+      user: userId,
     });
     return account?.toObject();
   };
   public list = async (
-    user_id: ExpenseCore.ID,
+    userId: string,
     limit: number,
     page: number,
     search?: string,
@@ -50,7 +44,7 @@ export class AccountService {
     const list = await AccountModel.aggregate([
       {
         $match: {
-          user: new mongoose.Types.ObjectId(user_id),
+          user: new mongoose.Types.ObjectId(userId as string),
           ...(search
             ? {
                 $or: [
@@ -68,13 +62,13 @@ export class AccountService {
           name: 1,
           balance: 1,
           initialBalance: 1,
-          updated_at: 1,
-          created_at: 1,
+          updatedAt: 1,
+          createdAt: 1,
         },
       },
       {
         $sort: {
-          updated_at: -1,
+          updatedAt: -1,
         },
       },
       {
