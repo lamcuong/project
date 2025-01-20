@@ -4,6 +4,7 @@ on:
     branches:
       - 'develop'
       - 'main'
+      - 'ci'
   pull_request:
 jobs:
   check-pr:
@@ -23,7 +24,7 @@ jobs:
         with:
           path: |
             **/node_modules
-            **/.next/cache
+            ${{ github.workspace }}/apps/frontend/.next/cache
           key: ${{ runner.os }}-node-cache-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.ts', '**/*.tsx', '**/*.jsx', '**/*.js') }}
           restore-keys: ${{ runner.os }}-node-cache-${{ hashFiles('**/package-lock.json') }}-
       - name: Install dependencies
