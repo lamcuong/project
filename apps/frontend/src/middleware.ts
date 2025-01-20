@@ -4,26 +4,26 @@ import { NextRequest } from 'next/server'
 export default async function middleware(req: NextRequest, event: NextFetchEvent) {
   const authMiddleware = await withAuth(
     function middleware(req) {
-      const path = req.nextUrl.pathname
-      const cookie = req.cookies.get('Authorization')
+      const path = req.nextUrl.pathname;
+      const cookie = req.cookies.get('Authorization');
 
       if (!cookie && req.nextauth.token?.accessToken) {
-        const response = NextResponse.next()
+        const response = NextResponse.next();
         response.cookies.set({
           name: 'Authorization',
-          value: `${req.nextauth.token?.accessToken}`
-        })
+          value: `${req.nextauth.token?.accessToken}`,
+        });
 
-        return response
+        return response;
       }
       if (cookie && path === '/auth') {
-        return NextResponse.redirect(new URL('/', req.nextUrl))
+        return NextResponse.redirect(new URL('/', req.nextUrl));
       }
       if (!cookie && path !== '/auth') {
-        return NextResponse.redirect(new URL('/auth', req.nextUrl))
+        return NextResponse.redirect(new URL('/auth', req.nextUrl));
       }
-      if (cookie && path !== '/auth') {
-      }
+      // if (cookie && path !== '/auth') {
+      // }
     },
     {
       callbacks: {

@@ -10,7 +10,8 @@ export class ExpenseController {
 
   public create = async (req: Request, res: Response) => {
     try {
-      const { type, category, transaction, account_id } = req.body;
+      const { type, category, transaction } = req.body;
+      const { account_id } = req.params;
       const data = await this.expenseService.create({
         type,
         transaction,
@@ -34,6 +35,7 @@ export class ExpenseController {
           type,
           category,
           transaction,
+          account: account_id,
         }),
       );
       return res.success({ data });

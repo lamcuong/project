@@ -3,29 +3,35 @@ import PaginationComponent from 'rc-pagination'
 import '@expense-management/frontend/styles/pagination.css'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 type PaginationProps = {
-  pageSize: number
-  onChangePage: any
-  count?: number
-  current_page?: number
-  onSizeChange: any
-}
+  pageSize: number;
+  onChangePage: any;
+  count?: number;
+  currentPage?: number;
+  onSizeChange: any;
+};
 
-const Pagination: React.FC<PaginationProps> = ({ pageSize, onChangePage, count, current_page, onSizeChange }) => {
+const Pagination: React.FC<PaginationProps> = ({
+  pageSize,
+  onChangePage,
+  count,
+  currentPage,
+  onSizeChange,
+}) => {
   return (
-    <div className='pagination flex gap-10'>
+    <div className="pagination flex gap-10">
       <PaginationComponent
         showSizeChanger
         onChange={onChangePage}
-        current={current_page}
+        current={currentPage}
         pageSize={pageSize}
-        prevIcon={<ChevronLeft className='mx-auto h-full' />}
-        nextIcon={<ChevronRight className='mx-auto h-full' />}
+        prevIcon={<ChevronLeft className="mx-auto h-full" />}
+        nextIcon={<ChevronRight className="mx-auto h-full" />}
         showTitle={false}
-        className='flex gap-1'
+        className="flex gap-1"
         total={count}
       />
     </div>
-  )
-}
+  );
+};
 
 export default Pagination

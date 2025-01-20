@@ -45,7 +45,7 @@ export class AccountController {
   public detail = async (req: Request, res: Response) => {
     try {
       const { account_id } = req.params;
-      const data = await this.accountService.detail(account_id, req.user.id!);
+      const data = await this.accountService.detail(account_id, req.user.id);
       return res.success({ data });
     } catch (error) {
       return res.internal();
@@ -54,7 +54,7 @@ export class AccountController {
   public delete = async (req: Request, res: Response) => {
     try {
       const { account_id } = req.params;
-      const data = await this.accountService.delete(account_id, req.user.id!);
+      const data = await this.accountService.delete(account_id, req.user.id);
       return res.success({ data });
     } catch (error) {
       return res.internal();
@@ -63,9 +63,9 @@ export class AccountController {
   public list = async (req: Request, res: Response) => {
     try {
       const { limit = 10, page = 1, search = '' } = req.query;
-      console.log(limit);
+
       const data = await this.accountService.list(
-        req.user?.id!,
+        req.user?.id,
         Number(limit),
         Number(page),
         search as string,

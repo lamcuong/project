@@ -1,24 +1,26 @@
 import { Response as Res } from 'express';
 
 declare global {
-  export type ExpressResponse<T = any> = Res<API.BaseResponse<T>>;
+  export type ExpressResponse<T = unknown> = Res<API.BaseResponse<T>>;
 
-  export type ExpressResponseList<T> = Res<API.BaseResponse<API.ResponseList<T>>>;
+  export type ExpressResponseList<T> = Res<
+    API.BaseResponse<API.ResponseList<T>>
+  >;
 
   namespace Express {
     interface Request {
       user: UserInterface;
     }
 
-    interface IResponseBody<T = any, V = any> {
+    interface IResponseBody<T = unknown, V = unknown> {
       status?: number;
       message?: string;
       data?: T;
       errors?: V;
-      success?: boolean
+      success?: boolean;
     }
 
-    interface Response<ResBody = any, Locals extends Record<string, any> = Record<string, any>> {
+    interface Response<ResBody = unknown> {
       success: (p?: IResponseBody<ResBody>) => void;
 
       error: (p?: IResponseBody<ResBody>) => void;

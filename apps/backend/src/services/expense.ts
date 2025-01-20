@@ -14,7 +14,7 @@ export class ExpenseService {
     const amount =
       expense.type === ExpenseType.Income
         ? expense.transaction?.amount
-        : -expense.transaction?.amount!;
+        : -expense.transaction?.amount;
     await AccountModel.findOneAndUpdate(
       { _id: expense.account.id, user: expense.account.user },
       {
@@ -62,7 +62,6 @@ export class ExpenseService {
       const account = await AccountModel.findById(account_id);
       if (!account) throw new Error('Account not found');
 
-      // @ts-ignore
       const newBalance = await account.getNewBalance();
       account.balance = newBalance;
       await account.save();
@@ -110,8 +109,8 @@ export class ExpenseService {
     return {
       list: list[0].data,
       paging: {
-        current_page: page,
-        total_page: Math.ceil(count / limit),
+        currentPage: page,
+        totalPages: Math.ceil(count / limit),
         limit,
         count,
       },
@@ -132,17 +131,14 @@ export class ExpenseService {
         $inc: {
           balance:
             expense.type === ExpenseType.Income
-              ? -expense.transaction?.amount!
+              ? -expense.transaction?.amount
               : expense.transaction?.amount,
         },
       },
     );
     return expense.toObject();
   };
-  public monthDetail = async (
-    account_id: ExpenseCore.ID,
-    month?: number | string,
-  ) => {
+  public monthDetail = async (account_id: ExpenseCore.ID) => {
     // const skip = limit * (page - 1);
     // const list = await ExpenseModel.aggregate([
     //   {
@@ -220,7 +216,6 @@ export class ExpenseService {
         },
       },
     ]);
-    console.log(list);
     return list;
   };
 }
