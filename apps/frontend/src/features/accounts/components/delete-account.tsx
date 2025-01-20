@@ -13,7 +13,7 @@ const DeleteAccount = ({ account }: DeleteAccountProps) => {
     mutationConfig: {
       onSuccess: () => {
         toast({
-          title: `Xoá thành công tài khoản ${account.name}`,
+          title: `Xoá thà1nh công tài khoản ${account.name}`,
         });
       },
     },
