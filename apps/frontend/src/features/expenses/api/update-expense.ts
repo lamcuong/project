@@ -37,7 +37,7 @@ export const useUpdateExpense = ({
   accountId,
 }: UseUpdateExpenseOptions) => {
   const queryClient = useQueryClient();
-
+  const ttt = 22;
   const { onSuccess, ...restConfig } = mutationConfig;
   return useMutation({
     mutationFn: updateExpense,
