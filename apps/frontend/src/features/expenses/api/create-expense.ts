@@ -23,7 +23,7 @@ export const createExpense = ({
   data: CreateExpenseInput;
   accountId: string;
 }): Promise<BaseResponse<Expense>> => {
-  return api.post(`/expense/create/${accountId}`, data);
+  return api.post(`/expense/${accountId}`, data);
 };
 
 type UseCreateExpenseOptions = {

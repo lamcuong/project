@@ -5,7 +5,7 @@ import { getAccountsQueryOptions } from './get-accounts';
 import { Account, BaseResponse } from '@expense-management/shared';
 
 export const deleteAccount = (accountId: string): Promise<BaseResponse<Account>> => {
-  return api.delete(`/account/delete/${accountId}`);
+  return api.delete(`/account/${accountId}`);
 };
 
 type UseDeleteAccountOptions = {

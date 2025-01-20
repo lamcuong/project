@@ -6,7 +6,7 @@ import { queryOptions, useQuery } from '@tanstack/react-query';
 export const getAccount = (
   accountId: string,
 ): Promise<BaseResponse<Account>> => {
-  return api.get(`/account/detail/${accountId}`);
+  return api.get(`/account/${accountId}`);
 };
 
 export const getAccountQueryOption = (accountId: string) => {
