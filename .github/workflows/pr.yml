@@ -27,7 +27,7 @@
               **/node_modules
               ${{ github.workspace }}/apps/frontend/.next/cache
             key: ${{ runner.os }}-node-cache-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.tsx', '**/*.ts') }}
-            restore-keys: ${{ runner.os }}-node-cache-
+            restore-keys: ${{ runner.os }}-node-cache-${{ hashFiles('**/package-lock.json') }}
         - name: Install dependencies
           if: steps.npm-cache.outputs.cache-hit != 'true'
           run: npm install
