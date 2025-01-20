@@ -27,7 +27,7 @@ const schema = new mongoose.Schema<
       ref: collections.user,
     },
   },
-  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } },
+  { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } },
 );
 defaultPlugin(schema);
 
