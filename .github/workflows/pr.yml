@@ -24,6 +24,7 @@ jobs:
         with:
           path: |
             **/node_modules
+            ${{ github.workspace }}/apps/frontend/.next/cache
           key: ${{ runner.os }}-node-cache-${{ hashFiles('**/package-lock.json') }}
           restore-keys: ${{ runner.os }}-node-cache-
       - name: Install dependencies
