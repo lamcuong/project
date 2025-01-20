@@ -23,7 +23,7 @@ jobs:
         with:
           path: |
             **/node_modules
-            ${{ github.workspace }}/.next/cache
+            **/.next/cache
           key: ${{ runner.os }}-node-cache-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.ts', '**/*.tsx', '**/*.jsx', '**/*.js') }}
           restore-keys: ${{ runner.os }}-node-cache-${{ hashFiles('**/package-lock.json') }}-
       - name: Install dependencies
