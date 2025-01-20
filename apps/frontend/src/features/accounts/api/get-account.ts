@@ -1,6 +1,6 @@
 import { api } from '@expense-management/frontend/lib/client';
 import { QueryConfig } from '@expense-management/frontend/lib/react-query';
-import { Account } from '@expense-management/shared';
+import { Account, BaseResponse } from '@expense-management/shared';
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
 export const getAccount = (

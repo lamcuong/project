@@ -1,3 +1,5 @@
+import { BaseListResponse, BaseResponse } from '@expense-management/shared';
+
 export interface ExpenseInterface {
   type: string;
   transaction: {
@@ -11,6 +13,6 @@ export interface ExpenseInterface {
   createdAt: string;
   updatedAt: string;
 }
-export type ExpenseInput = Partial<ExpenseInterface>
-export type ExpenseResponse = BaseResponse<ExpenseInterface>
-export type ExpenseListResponse = BaseListResponse<ExpenseInterface>
+export type ExpenseInput = Partial<ExpenseInterface>;
+export type ExpenseResponse = BaseResponse<ExpenseInterface>;
+export type ExpenseListResponse = BaseListResponse<ExpenseInterface>;

@@ -5,6 +5,7 @@ import {
   ExpenseInput,
   ExpenseResponse,
 } from '@expense-management/frontend/types/expense';
+import { BaseResponse } from '@expense-management/shared';
 
 const list = (id: string) => {
   return handleRequest<BaseResponse<ExpenseListResponse>>(`${apiExpense}/list/${id}`, {
