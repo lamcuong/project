@@ -4,6 +4,7 @@ on:
     branches:
       - 'develop'
       - 'main'
+      - 'ci1'
   pull_request:
 jobs:
   check-pr:
