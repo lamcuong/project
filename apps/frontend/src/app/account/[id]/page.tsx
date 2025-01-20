@@ -18,7 +18,7 @@ const Detail: React.FC<DetailProps> = () => {
             triggerButton={
               <Button className="w-1/5 flex items-center justify-center gap-3">
                 <PlusIcon />{' '}
-                <p className="hidden lg:block">Tạo giao dịch mới</p>{' '}
+                <p className="hidden lg:block">Tạo g1iao dịch mới</p>{' '}
               </Button>
             }
           />
