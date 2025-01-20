@@ -1,4 +1,5 @@
 import { toast } from '@expense-management/frontend/components/ui/use-toast';
+import { BaseResponse } from '@expense-management/shared';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getCookie } from 'cookies-next';
 export type RequestResponse<ResponseData> = AxiosResponse<ResponseData> & {

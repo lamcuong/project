@@ -1,6 +1,6 @@
 import { api } from '@expense-management/frontend/lib/client';
 import { MutationConfig } from '@expense-management/frontend/lib/react-query';
-import { Expense, ExpenseType } from '@expense-management/shared';
+import { BaseResponse, Expense, ExpenseType } from '@expense-management/shared';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
 import { getExpensesQueryOptions } from './get-expenses';
