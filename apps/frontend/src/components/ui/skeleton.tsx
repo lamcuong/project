@@ -25,7 +25,6 @@ function Skeleton({ className, times, outerClassName, gap }: SkeletonProps) {
         })}
     </div>
   );
-  // return <div className={cn('animate-pulse rounded-md bg-muted', className)} />;
 }
 
 export { Skeleton };

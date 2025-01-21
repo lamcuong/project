@@ -6,7 +6,6 @@ import { UserController } from '../controllers/user';
 
 /* ------- Service ----------- */
 import { UserService } from '../services/user';
-// import { AccountController } from '../controllers/account/account';
 import { AccountService } from '../services/account';
 import { ExpenseService } from '@expense-management/backend/services/expense';
 import { AccountController } from '@expense-management/backend/controllers/account';

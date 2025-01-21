@@ -1,7 +1,6 @@
-import PaginationComponent from 'rc-pagination'
-// import '../../../styles/pagination.css'
-import '@expense-management/frontend/styles/pagination.css'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import PaginationComponent from 'rc-pagination';
+import '@expense-management/frontend/styles/pagination.css';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 type PaginationProps = {
   pageSize: number;
   onChangePage: any;
@@ -34,4 +33,4 @@ const Pagination: React.FC<PaginationProps> = ({
   );
 };
 
-export default Pagination
+export default Pagination;
