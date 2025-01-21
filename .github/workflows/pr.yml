@@ -33,9 +33,9 @@
           with:
             path: |
               ${{ github.workspace }}/apps/frontend/.next/cache
-              key: ${{ runner.os }}-nextjs-cache-${{ hashFiles('apps/frontend/**/*.tsx', 'apps/frontend/**/*.ts', 'apps/frontend/**/*.js') }}
-              restore-keys: |
-                ${{ runner.os }}-nextjs-cache-    
+            key: ${{ runner.os }}-nextjs-cache-${{ hashFiles('apps/frontend/**/*.tsx', 'apps/frontend/**/*.ts', 'apps/frontend/**/*.js') }}
+            restore-keys: ${{ runner.os }}-nextjs-cache-
+                
         - name: Install dependencies
           if: steps.npm-cache.outputs.cache-hit != 'true'
           run: npm install
