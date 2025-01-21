@@ -42,23 +42,6 @@ export class ExpenseService {
       input.transaction?.amount !== expense.transaction?.amount ||
       input.type !== expense.type
     ) {
-      // const newBalance = await ExpenseModel.aggregate([
-      //   {
-      //     $match: {
-      //       account: new mongoose.Types.ObjectId(accountId),
-      //     },
-      //   },
-      //   {
-      //     $group: {
-      //       _id: null,
-      //       newBalance: {
-      //         $sum: {
-      //           $cond: [{ $eq: ['$type', 'income'] }, '$transaction.amount', { $subtract: [0, '$transaction.amount'] }],
-      //         },
-      //       },
-      //     },
-      //   },
-      // ]);
       const account = await AccountModel.findById(accountId);
       if (!account) throw new Error('Account not found');
 
@@ -137,85 +120,5 @@ export class ExpenseService {
       },
     );
     return expense.toObject();
-  };
-  public monthDetail = async (accountId: ExpenseCore.ID) => {
-    // const skip = limit * (page - 1);
-    // const list = await ExpenseModel.aggregate([
-    //   {
-    //     $match: {
-    //       account: new mongoose.Types.ObjectId(accountId),
-    //     },
-    //   },
-    //   {
-    //     $group: {
-    //       _id: {
-    //         year: { $year: '$transaction.year' },
-    //         month: { $month: '$transaction.date' },
-    //         day: {
-    //           $cond: {
-    //             if: { $eq: [type, 'day'] },
-    //             then: { $dayOfMonth: '$transaction.date' },
-    //             else: null,
-    //           },
-    //         },
-    //       },
-    //       transactions: {
-    //         $push: '$$ROOT',
-    //       },
-    //       totalAmount: { $sum: '$transaction.amount' },
-    //     },
-    //   },
-    //   {
-    //     $project: {
-    //       _id: 0,
-    //       date: '$_id',
-    //       transactions: 1,
-    //       totalAmount: 1,
-    //     },
-    //   },
-    //   {
-    //     $sort: {
-    //       created_at: -1,
-    //     },
-    //   },
-    //   {
-    //     $facet: {
-    //       data: [{ $skip: skip }, { $limit: limit }],
-    //       total: [{ $count: 'count' }],
-    //     },
-    //   },
-    // ]);
-    // const count = list[0].total[0]?.count;
-
-    // console.log('12312312', list);
-    // return {
-    //   data: list[0].data,
-    //   paging: {
-    //     current_page: page,
-    //     limit: limit,
-    //     total_page: Math.ceil(count / limit),
-    //     count: count,
-    //   },
-    // };
-    const list = await ExpenseModel.aggregate([
-      {
-        $match: {
-          account: new mongoose.Types.ObjectId(accountId),
-        },
-      },
-      {
-        $group: {
-          _id: {
-            year: { $year: '$transaction.date' },
-            month: { $month: '$transaction.date' },
-          },
-          transactions: {
-            $push: '$$ROOT',
-          },
-          totalAmount: { $sum: '$transaction.amount' },
-        },
-      },
-    ]);
-    return list;
   };
 }

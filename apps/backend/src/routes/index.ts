@@ -1,5 +1,4 @@
 import express from 'express';
-// import { UserController } from '../controllers/user';
 import user from './user/index';
 import account from './account/index';
 import expense from './expense/index';
