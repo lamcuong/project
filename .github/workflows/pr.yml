@@ -25,9 +25,17 @@
           with:
             path: |
               **/node_modules
+            key: ${{ runner.os }}-node-cache-${{ hashFiles('**/package-lock.json') }}
+            restore-keys: ${{ runner.os }}-node-cache-
+
+        - name: Cache Next.js build
+          uses: actions/cache@v4
+          with:
+            path: |
               ${{ github.workspace }}/apps/frontend/.next/cache
-            key: ${{ runner.os }}-node-cache-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.tsx', '**/*.ts', '**/*.js') }}
-            restore-keys: ${{ runner.os }}-node-cache-${{ hashFiles('**/package-lock.json') }}
+              key: ${{ runner.os }}-nextjs-cache-${{ hashFiles('apps/frontend/**/*.tsx', 'apps/frontend/**/*.ts', 'apps/frontend/**/*.js') }}
+              restore-keys: |
+                ${{ runner.os }}-nextjs-cache-    
         - name: Install dependencies
           if: steps.npm-cache.outputs.cache-hit != 'true'
           run: npm install
