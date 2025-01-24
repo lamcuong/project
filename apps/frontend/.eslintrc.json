@@ -15,7 +15,9 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "rules": {}
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off"
+      }
     },
     {
       "files": ["*.js", "*.jsx"],
@@ -27,5 +29,7 @@
         "jest": true
       }
     }
-  ]
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": { "ecmaVersion": "latest", "sourceType": "module" }
 }

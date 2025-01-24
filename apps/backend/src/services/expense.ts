@@ -14,7 +14,7 @@ export class ExpenseService {
     const amount =
       expense.type === ExpenseType.Income
         ? expense.transaction?.amount
-        : -expense.transaction?.amount!;
+        : -expense.transaction?.amount;
     await AccountModel.findOneAndUpdate(
       { _id: expense.account.id, user: expense.account.user },
       {
@@ -27,42 +27,24 @@ export class ExpenseService {
     return expense.toObject();
   };
   public update = async (
-    expense_id: ExpenseCore.ID,
-    account_id: ExpenseCore.ID,
+    expenseId: ExpenseCore.ID,
+    accountId: ExpenseCore.ID,
     input: ExpenseInput,
   ) => {
     const expense = await (
       await ExpenseModel.findOneAndUpdate(
-        { _id: expense_id, account: account_id },
+        { _id: expenseId, account: accountId },
         { $set: input },
       )
-    )?.populate('account');
+    ).populate('account');
     if (!expense) throw new Error('Not found');
     if (
       input.transaction?.amount !== expense.transaction?.amount ||
       input.type !== expense.type
     ) {
-      // const newBalance = await ExpenseModel.aggregate([
-      //   {
-      //     $match: {
-      //       account: new mongoose.Types.ObjectId(account_id),
-      //     },
-      //   },
-      //   {
-      //     $group: {
-      //       _id: null,
-      //       newBalance: {
-      //         $sum: {
-      //           $cond: [{ $eq: ['$type', 'income'] }, '$transaction.amount', { $subtract: [0, '$transaction.amount'] }],
-      //         },
-      //       },
-      //     },
-      //   },
-      // ]);
-      const account = await AccountModel.findById(account_id);
+      const account = await AccountModel.findById(accountId);
       if (!account) throw new Error('Account not found');
 
-      // @ts-ignore
       const newBalance = await account.getNewBalance();
       account.balance = newBalance;
       await account.save();
@@ -70,7 +52,7 @@ export class ExpenseService {
     return expense?.toObject();
   };
   public list = async (
-    account_id: ExpenseCore.ID,
+    accountId: ExpenseCore.ID,
     limit: number,
     page: number,
   ) => {
@@ -78,13 +60,13 @@ export class ExpenseService {
     const list = await ExpenseModel.aggregate([
       {
         $match: {
-          account: new mongoose.Types.ObjectId(account_id),
+          account: new mongoose.Types.ObjectId(accountId),
         },
       },
 
       {
         $sort: {
-          created_at: -1,
+          createdAt: -1,
         },
       },
 
@@ -95,8 +77,8 @@ export class ExpenseService {
           type: 1,
           transaction: 1,
           category: 1,
-          updated_at: 1,
-          created_at: 1,
+          updatedAt: 1,
+          createdAt: 1,
         },
       },
       {
@@ -110,117 +92,33 @@ export class ExpenseService {
     return {
       list: list[0].data,
       paging: {
-        current_page: page,
-        total_page: Math.ceil(count / limit),
+        currentPage: page,
+        totalPages: Math.ceil(count / limit),
         limit,
         count,
       },
     };
   };
   public delete = async (
-    account_id: ExpenseCore.ID,
-    expense_id: ExpenseCore.ID,
+    accountId: ExpenseCore.ID,
+    expenseId: ExpenseCore.ID,
   ) => {
     const expense = await ExpenseModel.findOneAndDelete(
-      { account: account_id, _id: expense_id },
+      { account: accountId, _id: expenseId },
       {},
     );
     if (!expense) throw new Error('Expense not found');
     await AccountModel.findOneAndUpdate(
-      { _id: account_id },
+      { _id: accountId },
       {
         $inc: {
           balance:
             expense.type === ExpenseType.Income
-              ? -expense.transaction?.amount!
+              ? -expense.transaction?.amount
               : expense.transaction?.amount,
         },
       },
     );
     return expense.toObject();
-  };
-  public monthDetail = async (
-    account_id: ExpenseCore.ID,
-    month?: number | string,
-  ) => {
-    // const skip = limit * (page - 1);
-    // const list = await ExpenseModel.aggregate([
-    //   {
-    //     $match: {
-    //       account: new mongoose.Types.ObjectId(account_id),
-    //     },
-    //   },
-    //   {
-    //     $group: {
-    //       _id: {
-    //         year: { $year: '$transaction.year' },
-    //         month: { $month: '$transaction.date' },
-    //         day: {
-    //           $cond: {
-    //             if: { $eq: [type, 'day'] },
-    //             then: { $dayOfMonth: '$transaction.date' },
-    //             else: null,
-    //           },
-    //         },
-    //       },
-    //       transactions: {
-    //         $push: '$$ROOT',
-    //       },
-    //       totalAmount: { $sum: '$transaction.amount' },
-    //     },
-    //   },
-    //   {
-    //     $project: {
-    //       _id: 0,
-    //       date: '$_id',
-    //       transactions: 1,
-    //       totalAmount: 1,
-    //     },
-    //   },
-    //   {
-    //     $sort: {
-    //       created_at: -1,
-    //     },
-    //   },
-    //   {
-    //     $facet: {
-    //       data: [{ $skip: skip }, { $limit: limit }],
-    //       total: [{ $count: 'count' }],
-    //     },
-    //   },
-    // ]);
-    // const count = list[0].total[0]?.count;
-
-    // console.log('12312312', list);
-    // return {
-    //   data: list[0].data,
-    //   paging: {
-    //     current_page: page,
-    //     limit: limit,
-    //     total_page: Math.ceil(count / limit),
-    //     count: count,
-    //   },
-    // };
-    const list = await ExpenseModel.aggregate([
-      {
-        $match: {
-          account: new mongoose.Types.ObjectId(account_id),
-        },
-      },
-      {
-        $group: {
-          _id: {
-            year: { $year: '$transaction.date' },
-            month: { $month: '$transaction.date' },
-          },
-          transactions: {
-            $push: '$$ROOT',
-          },
-          totalAmount: { $sum: '$transaction.amount' },
-        },
-      },
-    ]);
-    console.log(list);
-    return list;
   };
 }

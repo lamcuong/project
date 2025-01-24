@@ -1,36 +1,50 @@
 import {  injectable } from 'inversify';
 import AccountModel from '../mongo/schemas/account';
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 import ExpenseModel from '@expense-management/backend/mongo/schemas/expense';
-  @injectable()
+@injectable()
 export class AccountService {
   regex = (pattern: string) => new RegExp(`.*${pattern}.*`);
   public create = async (input: AccountInput) => {
     const account = await AccountModel.create(input);
     return account.toObject();
   };
-  public update = async (account_id: ExpenseCore.ID, input: AccountInput) => {
-    const account = await AccountModel.findOneAndUpdate({ _id: account_id, user: input.user }, input);
+  public update = async (accountId: ExpenseCore.ID, input: AccountInput) => {
+    const account = await AccountModel.findOneAndUpdate(
+      { _id: accountId, user: input.user },
+      input,
+    );
     if (!account) throw new Error('Account not found!');
-    account.balance! += input.initialBalance! - account.initialBalance!;
+    account.balance += input.initialBalance - account.initialBalance;
     await account.save();
     return account?.toObject();
   };
-  public delete = async (account_id: ExpenseCore.ID, user_id: ExpenseCore.ID) => {
-    const account = await AccountModel.findOneAndDelete({ _id: account_id, user: user_id },{});
-    await ExpenseModel.deleteMany({ account: account_id });
+  public delete = async (accountId: ExpenseCore.ID, userId: ExpenseCore.ID) => {
+    const account = await AccountModel.findOneAndDelete(
+      { _id: accountId, user: userId },
+      {},
+    );
+    await ExpenseModel.deleteMany({ account: accountId });
     return account?.toObject();
   };
-  public detail = async (account_id: ExpenseCore.ID, user_id: ExpenseCore.ID) => {
-    const account = await AccountModel.findOne({ _id: account_id, user: user_id });
+  public detail = async (accountId: ExpenseCore.ID, userId: ExpenseCore.ID) => {
+    const account = await AccountModel.findOne({
+      _id: accountId,
+      user: userId,
+    });
     return account?.toObject();
   };
-  public list = async (user_id: ExpenseCore.ID, limit: number, page: number, search?: string) => {
+  public list = async (
+    userId: string,
+    limit: number,
+    page: number,
+    search?: string,
+  ) => {
     const skip = (page - 1) * limit;
     const list = await AccountModel.aggregate([
       {
         $match: {
-          user: new mongoose.Types.ObjectId(user_id),
+          user: new mongoose.Types.ObjectId(userId as string),
           ...(search
             ? {
                 $or: [
@@ -48,13 +62,13 @@ export class AccountService {
           name: 1,
           balance: 1,
           initialBalance: 1,
-          updated_at: 1,
-          created_at: 1,
+          updatedAt: 1,
+          createdAt: 1,
         },
       },
       {
         $sort: {
-          updated_at: -1,
+          updatedAt: -1,
         },
       },
       {
@@ -64,13 +78,12 @@ export class AccountService {
         },
       },
     ]);
-    console.log('12312', list[0]);
     const count = list[0]?.total[0]?.count;
     return {
       list: list[0].data,
       paging: {
-        current_page: page,
-        total_page: Math.ceil(count / limit),
+        currentPage: page,
+        totalPages: Math.ceil(count / limit),
         limit,
         count,
       },

@@ -1,16 +1,18 @@
+import { BaseListResponse, BaseResponse } from '@expense-management/shared';
+
 export interface ExpenseInterface {
-  type: string
+  type: string;
   transaction: {
-    description: string
-    date: Date
-    amount: number
-  }
-  category: string
-  account_id: string
-  id: string
-  created_at: string
-  updated_at: string
+    description: string;
+    date: Date;
+    amount: number;
+  };
+  category: string;
+  accountId: string;
+  id: string;
+  createdAt: string;
+  updatedAt: string;
 }
-export type ExpenseInput = Partial<ExpenseInterface>
-export type ExpenseResponse = BaseResponse<ExpenseInterface>
-export type ExpenseListResponse = BaseListResponse<ExpenseInterface>
+export type ExpenseInput = Partial<ExpenseInterface>;
+export type ExpenseResponse = BaseResponse<ExpenseInterface>;
+export type ExpenseListResponse = BaseListResponse<ExpenseInterface>;

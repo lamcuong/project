@@ -16,7 +16,7 @@ const schema = new mongoose.Schema<ExpenseCore.Expense>(
       date: SchemaTypes.Date,
     },
   },
-  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
+  { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } },
 );
 defaultPlugin(schema);
 const ExpenseModel = mongoose.model(collections.expense, schema);

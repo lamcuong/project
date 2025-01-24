@@ -20,13 +20,23 @@ jobs:
 
       - name: Cache node modules
         uses: actions/cache@v4
+        id: npm-cache
         with:
           path: |
             **/node_modules
-            **/.next/cache
-          key: ${{ runner.os }}-node-20-cache-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-node-20-cache-
+          key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-npm-cache-
+
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ github.workspace }}/apps/frontend/.next/cache
+          key: ${{ runner.os }}-nextjs-cache-${{ hashFiles('apps/frontend/**/*.tsx', 'apps/frontend/**/*.ts', 'apps/frontend/**/*.js') }}
+          restore-keys: ${{ runner.os }}-nextjs-cache-
+              
       - name: Install dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
         run: npm install
 
       - name: Create .env file
